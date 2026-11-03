@@ -27,6 +27,11 @@ function LeftPanel() {
   return (
     <Panel side="left">
       <p><b className="text-cyan-300">My Gallery</b><br /><span className="text-zinc-400">{HELP}</span></p>
+      <p className="text-[11px] leading-snug text-zinc-500">
+        Gallery: <a className="underline" href="https://sketchfab.com/3d-models/richards-art-gallery-audio-tour-0e3e19faa6474fd5974e6a7ed1b221d8" target="_blank" rel="noreferrer">Richard&apos;s Art Gallery – Audio Tour</a> by{" "}
+        <a className="underline" href="https://sketchfab.com/shinymagic" target="_blank" rel="noreferrer">shinymagic</a>,{" "}
+        <a className="underline" href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a> (optimised)
+      </p>
       <div className="grid gap-1">
         <Button size="sm" variant="outline" onClick={takePhoto}>Photo [P]</Button>
         <Button size="sm" variant="outline" onClick={() => useGame.setState({ hideUI: true })}>Showcase mode [H]</Button>

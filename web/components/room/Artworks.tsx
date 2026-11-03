@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { Clickable } from "./Clickable";
-import { H } from "@/lib/gallery";
+import { CEILING } from "@/lib/gallery";
 import { ARTWORKS, artworkUrl, useArtwork, type Artwork } from "@/lib/artworks";
 
 const FRAME = 0.035, DEPTH = 0.03, MAT = 0.14; // silver moulding, white mount (share of the frame's width)
@@ -26,14 +26,14 @@ function Piece({ a }: { a: Artwork }) {
   );
 }
 
-// The spot's track light (Gallery.tsx) switched on: light pooling on the picture.
+// A spotlight from the ceiling, 1 m out from the wall: light pooling on the picture.
 function Light({ a }: { a: Artwork }) {
   const light = useRef<THREE.SpotLight>(null), target = useMemo(() => new THREE.Object3D(), []);
   useEffect(() => { if (light.current) light.current.target = target; }, [target]);
   return (
     <>
       <primitive object={target} position={[0, a.height - 0.15, 0]} />
-      <spotLight ref={light} position={[0, H.ceiling - 0.1, 0.95]} angle={0.42} penumbra={0.8} intensity={6} distance={4} decay={1.4} color="#fff3e0" />
+      <spotLight ref={light} position={[0, CEILING - 0.1, 0.95]} angle={0.42} penumbra={0.8} intensity={6} distance={4} decay={1.4} color="#fff3e0" />
     </>
   );
 }
