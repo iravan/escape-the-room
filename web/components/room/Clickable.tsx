@@ -5,7 +5,7 @@ import type { ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
 import { useGame, type Vec3 } from "@/lib/store";
 
-const HOVER = new THREE.Color(0.06, 0.05, 0.1); // added to emissive: a lift like Unity's colour × 1.4 + violet
+const HOVER = new THREE.Color(0.08, 0.07, 0.06); // added to emissive on hover: a warm lift, like the gallery light
 
 // Brighten (or restore) every lit mesh this clickable owns. Nested clickables light up on their own, so the walk stops at them.
 function tint(root: THREE.Object3D, on: boolean) {
@@ -68,7 +68,7 @@ export function Tooltip() {
     return () => window.removeEventListener("pointermove", move);
   }, []);
   return (
-    <div ref={el} className={`pointer-events-none fixed left-0 top-0 rounded border border-cyan-400/40 bg-black/80 px-2 py-1 text-xs text-cyan-100 ${hint ? "" : "hidden"}`}>
+    <div ref={el} className={`pointer-events-none fixed left-0 top-0 rounded bg-foreground/90 px-2 py-1 text-xs text-background shadow ${hint ? "" : "hidden"}`}>
       {hint}
     </div>
   );

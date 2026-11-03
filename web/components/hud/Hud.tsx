@@ -15,11 +15,12 @@ const one = (v: number | readonly number[]) => (Array.isArray(v) ? v[0] : v) as 
 // Title over the slowly turning gallery; any key, click or tap enters.
 function Title() {
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 bg-black/45 text-center">
-      <h1 className="text-6xl font-light uppercase tracking-[0.3em] text-white sm:text-8xl [text-shadow:0_2px_24px_rgba(0,0,0,0.5)]">My Gallery</h1>
-      <p className="text-lg text-zinc-100">two rooms and a corridor of artworks</p>
+    <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 bg-background/60 text-center backdrop-blur-[2px]">
+      <h1 className="text-6xl font-light uppercase tracking-[0.3em] text-foreground sm:text-8xl">My Gallery</h1>
+      <div className="h-1 w-40 bg-foreground" />
+      <p className="text-lg text-wood">two rooms and a corridor of artworks</p>
       <Button size="lg" className="mt-6 h-14 px-10 text-xl font-bold">ENTER</Button>
-      <p className="text-sm text-zinc-300">tap or press any key · ? for controls</p>
+      <p className="text-sm text-muted-foreground">tap or press any key · ? for controls</p>
     </div>
   );
 }
@@ -30,12 +31,12 @@ function LeftPanel() {
   return (
     <>
     <Button size="icon" variant="outline" aria-label={open ? "Hide menu" : "Show menu"} aria-expanded={open} onClick={() => setOpen(!open)}
-      className="fixed left-2.5 top-2.5 hidden bg-black/60 [@media(pointer:coarse)]:inline-flex">
+      className="fixed left-2.5 top-2.5 hidden bg-background/90 shadow-md [@media(pointer:coarse)]:inline-flex">
       {open ? <XIcon /> : <MenuIcon />}
     </Button>
     <Panel side="left" className={`[@media(pointer:coarse)]:top-14 [@media(pointer:coarse)]:max-h-[calc(100dvh-4.5rem)] ${open ? "" : "[@media(pointer:coarse)]:hidden"}`}>
-      <p><b className="text-cyan-300">My Gallery</b><br /><span className="text-zinc-400">{HELP}</span></p>
-      <p className="text-[11px] leading-snug text-zinc-500">
+      <p><b className="text-wood">My Gallery</b><br /><span className="text-muted-foreground">{HELP}</span></p>
+      <p className="text-[11px] leading-snug text-muted-foreground">
         Gallery: <a className="underline" href="https://sketchfab.com/3d-models/richards-art-gallery-audio-tour-0e3e19faa6474fd5974e6a7ed1b221d8" target="_blank" rel="noreferrer">Richard&apos;s Art Gallery – Audio Tour</a> by{" "}
         <a className="underline" href="https://sketchfab.com/shinymagic" target="_blank" rel="noreferrer">shinymagic</a>,{" "}
         <a className="underline" href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a> (optimised)
@@ -69,7 +70,7 @@ function Dialogs() {
         <DialogContent className="sm:max-w-lg">
           <DialogHeader><DialogTitle>Controls</DialogTitle></DialogHeader>
           <dl className="space-y-2 text-sm">
-            {CONTROLS.map(([h, t]) => <div key={h}><dt className="font-bold text-cyan-300">{h}</dt><dd className="text-zinc-300">{t}</dd></div>)}
+            {CONTROLS.map(([h, t]) => <div key={h}><dt className="font-bold text-wood">{h}</dt><dd className="text-muted-foreground">{t}</dd></div>)}
           </dl>
           <Button onClick={close}>Close</Button>
         </DialogContent>
@@ -86,7 +87,7 @@ function Dialogs() {
                 <Button key={q} size="sm" variant={quality === i ? "default" : "outline"} onClick={() => useGame.getState().setQuality(i as 0 | 1 | 2)}>{q}</Button>
               ))}
             </div>
-            <p className="text-xs text-zinc-400">Low: no glow, no shadows. High: glow, soft shadows, smoothing.</p>
+            <p className="text-xs text-muted-foreground">Low: no glow, no shadows. High: glow, soft shadows, smoothing.</p>
           </div>
           <Button onClick={close}>Close</Button>
         </DialogContent>
@@ -120,9 +121,9 @@ function useHudKeys() {
 // Portrait phones are too narrow for the side panels: ask for landscape instead of shrinking everything.
 function TurnSideways() {
   return (
-    <div className="fixed inset-0 z-50 hidden flex-col items-center justify-center gap-3 bg-[#05020d]/95 p-6 text-center [@media(orientation:portrait)_and_(pointer:coarse)]:flex">
-      <p className="text-3xl font-bold text-fuchsia-500 [text-shadow:0_0_18px_#ff40c0]">Turn your phone sideways</p>
-      <p className="text-zinc-300">The room is best in landscape.</p>
+    <div className="fixed inset-0 z-50 hidden flex-col items-center justify-center gap-3 bg-background p-6 text-center [@media(orientation:portrait)_and_(pointer:coarse)]:flex">
+      <p className="text-3xl font-light uppercase tracking-[0.2em] text-wood">Turn your phone sideways</p>
+      <p className="text-muted-foreground">The gallery is best in landscape.</p>
     </div>
   );
 }

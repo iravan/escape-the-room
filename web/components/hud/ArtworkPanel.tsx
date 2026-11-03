@@ -20,11 +20,11 @@ export function ArtworkPanel() {
   return (
     <Panel side="right">
       {/* eslint-disable-next-line @next/next/no-img-element -- static export, no image optimisation */}
-      <img src={artworkUrl(a)} alt={a.title} className="max-h-56 w-full rounded object-contain" />
+      <img src={artworkUrl(a)} alt={a.title} className="max-h-56 w-full rounded border border-border bg-card object-contain p-2" />
       <div>
-        <h2 className="text-lg font-bold text-fuchsia-400">{a.title}</h2>
+        <h2 className="text-lg font-bold text-wood">{a.title}</h2>
         {a.artist && <p>{a.artist}</p>}
-        {(a.year || a.medium) && <p className="italic text-zinc-400">{[a.year, a.medium].filter(Boolean).join(" · ")}</p>}
+        {(a.year || a.medium) && <p className="italic text-muted-foreground">{[a.year, a.medium].filter(Boolean).join(" · ")}</p>}
       </div>
       {a.description && <p className="whitespace-pre-wrap">{a.description}</p>}
       <Button size="sm" variant="secondary" onClick={close}>Close [Esc]</Button>
