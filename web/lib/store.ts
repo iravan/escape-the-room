@@ -21,6 +21,7 @@ type State = {
   hint: string; // hover tooltip
   title: boolean; // title screen showing (every load)
   hideUI: boolean; // showcase mode
+  menu: boolean; // touch screens: menu panel shown (not saved)
   dialog: "" | "settings" | "controls";
   look: (dYaw: number, dPitch: number) => void;
   setRoomPos: (p: Vec3) => void;
@@ -38,6 +39,7 @@ export const useGame = create<State>()(
       hint: "",
       title: true,
       hideUI: false,
+      menu: false,
       dialog: "",
       look: (dYaw, dPitch) => set((s) => ({ yaw: s.yaw + dYaw, pitch: Math.min(60, Math.max(-60, s.pitch + dPitch)) })),
       setRoomPos: (p) => set({ roomPos: p }),

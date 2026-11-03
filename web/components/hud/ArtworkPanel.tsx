@@ -18,7 +18,7 @@ export function ArtworkPanel() {
   }, [a]);
   if (!a) return null;
   return (
-    <Panel side="right">
+    <Panel side="right" className="[@media(pointer:coarse)]:top-14 [@media(pointer:coarse)]:max-h-[calc(100dvh-4.5rem)]">
       {/* eslint-disable-next-line @next/next/no-img-element -- static export, no image optimisation */}
       <img src={artworkUrl(a)} alt={a.title} className="max-h-56 w-full rounded border border-border bg-card object-contain p-2" />
       <div>

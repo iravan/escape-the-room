@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { Clickable } from "./Clickable";
 import { CEILING } from "@/lib/gallery";
 import { ARTWORKS, artworkUrl, useArtwork, type Artwork } from "@/lib/artworks";
+import { useGame } from "@/lib/store";
 
 const FRAME = 0.035, DEPTH = 0.03, MAT = 0.14; // silver moulding, white mount (share of the frame's width)
 
@@ -15,7 +16,7 @@ function Piece({ a }: { a: Artwork }) {
   const img = map.image as { width: number; height: number };
   const w = a.width, mount = w * MAT, pw = w - 2 * (FRAME + mount), ph = (pw * img.height) / img.width, h = ph + 2 * (FRAME + mount);
   return (
-    <Clickable hint={a.title} onTap={() => useArtwork.setState({ open: a.id })} position={[0, 0, DEPTH / 2]}>
+    <Clickable hint={a.title} onTap={() => { useArtwork.setState({ open: a.id }); useGame.setState({ menu: false }); }} position={[0, 0, DEPTH / 2]}>
       <mesh castShadow>
         <boxGeometry args={[w, h, DEPTH]} />
         <meshStandardMaterial color="#d3d5d8" metalness={0.35} roughness={0.35} />

@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { MenuIcon, XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Slider } from "@/components/ui/slider";
 import { typing, useGame } from "@/lib/store";
 import { takePhoto } from "@/lib/photo";
+import { useArtwork } from "@/lib/artworks";
 import { Panel } from "./Panel";
 
 const HELP = "Drag to look; WASD or the stick (bottom left) to move. Click an artwork to read about it.";
@@ -25,16 +26,18 @@ function Title() {
   );
 }
 
-// On touch screens the menu folds away behind a ☰ button (top left) so the gallery fills the screen.
+// On touch screens the menu folds away behind a ☰ button (top right) so the gallery fills the screen; it opens
+// under the button, and showing it closes an open artwork (they share that side).
 function LeftPanel() {
-  const [open, setOpen] = useState(false);
+  const open = useGame((s) => s.menu);
+  const toggle = () => { useGame.setState({ menu: !open }); if (!open) useArtwork.setState({ open: "" }); };
   return (
     <>
-    <Button size="icon" variant="outline" aria-label={open ? "Hide menu" : "Show menu"} aria-expanded={open} onClick={() => setOpen(!open)}
-      className="fixed left-2.5 top-2.5 hidden bg-background/90 shadow-md [@media(pointer:coarse)]:inline-flex">
+    <Button size="icon" variant="outline" aria-label={open ? "Hide menu" : "Show menu"} aria-expanded={open} onClick={toggle}
+      className="fixed right-2.5 top-2.5 hidden bg-background/90 shadow-md [@media(pointer:coarse)]:inline-flex">
       {open ? <XIcon /> : <MenuIcon />}
     </Button>
-    <Panel side="left" className={`[@media(pointer:coarse)]:top-14 [@media(pointer:coarse)]:max-h-[calc(100dvh-4.5rem)] ${open ? "" : "[@media(pointer:coarse)]:hidden"}`}>
+    <Panel side="left" className={`[@media(pointer:coarse)]:left-auto [@media(pointer:coarse)]:right-2.5 [@media(pointer:coarse)]:top-14 [@media(pointer:coarse)]:max-h-[calc(100dvh-4.5rem)] ${open ? "" : "[@media(pointer:coarse)]:hidden"}`}>
       <p><b className="text-wood">My Gallery</b><br /><span className="text-muted-foreground">{HELP}</span></p>
       <p className="text-[11px] leading-snug text-muted-foreground">
         Gallery: <a className="underline" href="https://sketchfab.com/3d-models/richards-art-gallery-audio-tour-0e3e19faa6474fd5974e6a7ed1b221d8" target="_blank" rel="noreferrer">Richard&apos;s Art Gallery – Audio Tour</a> by{" "}
@@ -58,7 +61,7 @@ const CONTROLS: [string, string][] = [
   ["Everywhere", "P photo · H hide UI (Show controls brings it back) · ? this help"],
   ["Room", "Drag to look, WASD or arrows to move, click anything that lights up."],
   ["Artworks", "Click an artwork to read its description. Esc or Close shuts it."],
-  ["Touch screens", "Tap = click, drag = look, the stick at the bottom left = walk, ☰ shows or hides the menu. Every panel has a button to close it, no keyboard needed."],
+  ["Touch screens", "Tap = click, drag = look, the stick at the bottom left = walk, ☰ (top right) shows or hides the menu. Every panel has a button to close it, no keyboard needed."],
 ];
 
 function Dialogs() {
