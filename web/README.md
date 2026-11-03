@@ -1,4 +1,4 @@
-# My Room (web)
+# My Gallery (web)
 
 Next.js 16 + React Three Fiber + Zustand + Tailwind + shadcn/ui. Rebuilt from the Unity version (git tag `unity-final`; see `../MIGRATION.md`).
 

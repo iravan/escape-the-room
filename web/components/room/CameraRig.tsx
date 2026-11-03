@@ -4,23 +4,14 @@ import { useEffect, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { stick, typing, useGame } from "@/lib/store";
-import { sfx } from "@/lib/audio";
-import { playAlbum, togglePlay, useCollection } from "@/lib/collection";
-import { SHOTS } from "@/lib/layout";
-import { HOMES, itemMatrix, poseOf, useLayout } from "@/lib/room";
-
-const SHOT_ITEM = { turntable: "turntable", shelf: "cabinet", crate: "crate" } as const;
-const shotMat = new THREE.Matrix4(), shotAt = new THREE.Vector3();
+import { useLayout } from "@/lib/room";
 
 const DEG = Math.PI / 180;
-const KEYS: Record<string, "room" | "turntable" | "crate" | "shelf"> = { "1": "room", "2": "turntable", "3": "crate", "4": "shelf" };
 const tmpPos = new THREE.Vector3();
 const tmpQuat = new THREE.Quaternion();
-const tmpMat = new THREE.Matrix4();
 const tmpEuler = new THREE.Euler(0, 0, 0, "YXZ");
-const UP = new THREE.Vector3(0, 1, 0);
 
-// Room view: drag to look (mouse or one finger), WASD/arrows to walk. Other views: eased fixed shots. 1–4 / Esc switch.
+// Drag to look (mouse or one finger), WASD/arrows to walk.
 export function CameraRig() {
   const { camera, gl, events } = useThree();
   const held = useRef(new Set<string>());
@@ -36,7 +27,7 @@ export function CameraRig() {
     };
     const move = (e: PointerEvent) => {
       const s = useGame.getState();
-      if (!last || last.id !== e.pointerId || s.view !== "room" || s.title || useLayout.getState().dragging) return;
+      if (!last || last.id !== e.pointerId || s.title || useLayout.getState().dragging) return;
       // Unity read mouse axes ×3: ~0.3° per pixel at sensitivity 1. FPS-style: drag right turns right, drag down looks down.
       s.look((e.clientX - last.x) * 0.3 * s.sensitivity, (e.clientY - last.y) * 0.3 * s.sensitivity);
       last = { id: e.pointerId, x: e.clientX, y: e.clientY };
@@ -46,35 +37,12 @@ export function CameraRig() {
       if (e.type === "keyup") { held.current.delete(e.key.toLowerCase()); return; } // a release always counts, wherever focus is
       if (typing(e)) return;
       const s = useGame.getState();
-      if (s.draft || s.dialog || s.title) return; // dialogs own the keyboard; the first key just enters
+      if (s.dialog || s.title) return; // dialogs own the keyboard; the first key just enters
       if (e.type === "keydown") {
-        const editing = useLayout.getState().editing;
-        if (KEYS[e.key] && !editing) s.setView(KEYS[e.key]); // edit mode stays in the room view
-        if (e.key === "m") useGame.setState({ muted: !s.muted });
-        if ((e.key === "Escape" || e.key === "Backspace") && !editing) s.back();
-        if (s.view === "inspect") {
-          if (e.key === "f") useGame.setState({ inspectRot: [s.inspectRot[0] + 180, s.inspectRot[1]] });
-          if (e.key === "v") { useGame.setState({ discOut: !s.discOut }); sfx("slide", 0.7); }
-          if (e.key === "g") useGame.setState({ gatefold: !s.gatefold });
-          if (e.key === " ") playAlbum(s.inspectId);
-        }
-        if (s.view === "turntable" && e.key === " ") togglePlay();
-        if (s.view === "crate") {
-          const albums = useCollection.getState().albums;
-          if (e.key === "d" || e.key === "ArrowRight") s.flip(1, albums.length);
-          if (e.key === "a" || e.key === "ArrowLeft") s.flip(-1, albums.length);
-          if ((e.key === "Enter" || e.key === "e") && albums[s.selected]) s.inspect(albums[s.selected].id);
-        }
         held.current.add(e.key.toLowerCase());
       }
     };
     const blur = () => held.current.clear();
-    // Crate: the wheel flips records (down = next).
-    const wheel = (e: WheelEvent) => {
-      const s = useGame.getState();
-      if (s.view === "crate" && e.deltaY) s.flip(Math.sign(e.deltaY), useCollection.getState().albums.length);
-    };
-    el.addEventListener("wheel", wheel, { passive: true });
     el.addEventListener("pointerdown", down);
     el.addEventListener("pointermove", move);
     el.addEventListener("pointerup", up);
@@ -90,14 +58,13 @@ export function CameraRig() {
       window.removeEventListener("keydown", key);
       window.removeEventListener("keyup", key);
       window.removeEventListener("blur", blur);
-      el.removeEventListener("wheel", wheel);
     };
   }, [gl]);
 
   useFrame((_, dt) => {
     const s = useGame.getState();
     if (s.title) useGame.setState({ yaw: s.yaw + Math.min(dt, 0.1) * 4 }); // the room turns slowly behind the title
-    if (s.view === "room") {
+    {
       const k = held.current;
       const clamp = (n: number) => Math.max(-1, Math.min(1, n));
       const h = clamp((k.has("d") || k.has("arrowright") ? 1 : 0) - (k.has("a") || k.has("arrowleft") ? 1 : 0) + stick.x);
@@ -113,13 +80,6 @@ export function CameraRig() {
       }
       tmpPos.set(...s.roomPos);
       tmpQuat.setFromEuler(tmpEuler.set(-s.pitch * DEG, -s.yaw * DEG, 0));
-    } else {
-      // Fixed shots follow their item if it has been moved.
-      const [eye, at] = SHOTS[s.view], item = s.view === "inspect" ? undefined : SHOT_ITEM[s.view];
-      itemMatrix(item ? HOMES[item] : { position: [0, 0, 0] }, item ? poseOf(item, HOMES[item]) : undefined, shotMat);
-      tmpPos.set(...eye).applyMatrix4(shotMat);
-      shotAt.set(...at).applyMatrix4(shotMat);
-      tmpQuat.setFromRotationMatrix(tmpMat.lookAt(tmpPos, shotAt, UP));
     }
     const t = 1 - Math.exp(-6 * Math.min(dt, 0.1));
     const moving = camera.position.distanceToSquared(tmpPos) > 1e-8 || 1 - Math.abs(camera.quaternion.dot(tmpQuat)) > 1e-8;

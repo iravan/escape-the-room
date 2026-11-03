@@ -8,8 +8,7 @@ import { useLayout } from "@/lib/room";
 
 const HOVER = new THREE.Color(0.06, 0.05, 0.1); // added to emissive: a lift like Unity's colour × 1.4 + violet
 
-// Brighten (or restore) every lit mesh this clickable owns. Nested clickables (spines in the cabinet,
-// sleeves in the crate) light up on their own, so the walk stops at them.
+// Brighten (or restore) every lit mesh this clickable owns. Nested clickables light up on their own, so the walk stops at them.
 function tint(root: THREE.Object3D, on: boolean) {
   for (const child of root.children) {
     if (child.userData.clickable) continue;
@@ -24,7 +23,7 @@ function tint(root: THREE.Object3D, on: boolean) {
 }
 
 // Something you can click: highlight + pointer cursor on hover, optional tooltip, and a tap that isn't
-// the end of a camera drag. Hover is off in Inspect, like Unity.
+// the end of a camera drag.
 export function Clickable({ onTap, hint, onHover, children, position, rotation, ref }: {
   onTap: () => void; hint?: string; onHover?: (on: boolean) => void; children: ReactNode;
   position?: Vec3; rotation?: THREE.Euler; ref?: Ref<THREE.Group>;
@@ -32,7 +31,6 @@ export function Clickable({ onTap, hint, onHover, children, position, rotation, 
   const own = useRef<THREE.Group>(null);
   const hover = (on: boolean) => (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
-    if (on && useGame.getState().view === "inspect") return;
     tint(e.eventObject, on);
     document.body.style.cursor = on ? "pointer" : "";
     if (hint) useGame.setState({ hint: on ? hint : "" });
@@ -61,7 +59,7 @@ export function Clickable({ onTap, hint, onHover, children, position, rotation, 
   );
 }
 
-// Spine titles are too thin to read on the shelf: a small label follows the pointer.
+// Hover label that follows the pointer (artwork titles).
 export function Tooltip() {
   const hint = useGame((s) => s.hint);
   const el = useRef<HTMLDivElement>(null);

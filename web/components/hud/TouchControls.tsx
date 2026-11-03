@@ -35,14 +35,13 @@ function MoveStick() {
   );
 }
 
-// On-screen ways out of everything Esc or H would leave: the fixed views, and showcase mode.
+// Touch: the move stick, and a way out of showcase mode.
 export function TouchControls() {
-  const view = useGame((s) => s.view), hideUI = useGame((s) => s.hideUI), title = useGame((s) => s.title), editing = useLayout((s) => s.editing);
+  const hideUI = useGame((s) => s.hideUI), title = useGame((s) => s.title), editing = useLayout((s) => s.editing);
   if (title) return null;
   if (hideUI) return (
     <Button size="sm" variant="outline" className="fixed bottom-3 right-3 bg-black/50 opacity-70" onClick={() => useGame.setState({ hideUI: false })}>Show controls</Button>
   );
   if (editing) return null;
-  if (view === "room") return <MoveStick />;
-  return <Button size="lg" className="fixed bottom-4 left-1/2 -translate-x-1/2 px-8 font-bold" onClick={() => useGame.getState().back()}>◀ Back</Button>;
+  return <MoveStick />;
 }

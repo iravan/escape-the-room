@@ -1,17 +1,21 @@
-# My Room
+# My Gallery
 
-A cozy neon bedroom in the browser for showing off your vinyl collection.
+A 3D room in the browser for showing artworks. Live at https://iravan.github.io/my-gallery/.
 
-Walk around the room, flip through crates, inspect sleeves, drop a record on the turntable, and share the space with friends. The room itself is customizable too — lighting moods, wall styles, size, and uploaded 3D models.
+**Artworks:** put images in [`web/public/artworks/`](web/public/artworks/) and describe each one in `artworks.json`
+(title, artist, year, medium, description, and which wall it hangs on). Click an artwork in the room to read its
+description. Field reference: [`web/public/artworks/README.md`](web/public/artworks/README.md).
 
 ## Features
 
-- **3D bedroom** — bed, desk setup, turntable, crate, cabinet, clutter, city outside the window
-- **Vinyl collection** — crate flip, spine browse, sleeve inspector (flip / vinyl / gatefold), album editor with custom covers and disc styles
-- **Turntable** — place a record, lower the tonearm, 33⅓ / 45 platter spin
-- **Showcase** — photo mode, HUD-free showcase mode, export / import / visit a friend’s room (read-only)
-- **Room customisation** — lighting presets, materials, room size, replace item looks with uploaded GLB models (cores like platter and screens stay working)
-- **Local-first** — collection and images persist in the browser; Supabase schema ready for signed-in sync and public rooms
+- **Artworks** — framed on the walls from a folder + JSON config; click one for its description
+- **3D room** — walk around (drag to look, WASD / touch stick), city outside the window
+- **Showcase** — photo mode, HUD-free showcase mode
+- **Room customisation** — lighting presets, materials, room size, replace item looks with uploaded GLB models
+- **Local-first** — room layout and uploaded models persist in the browser
+
+Forked from My Room (a vinyl showcase); the vinyl features were removed. Older docs (`MIGRATION.md`, `ITEMS.md`, …)
+describe the original project.
 
 ## Stack
 
@@ -21,8 +25,7 @@ Walk around the room, flip through crates, inspect sleeves, drop a record on the
 | 3D | React Three Fiber, drei, three.js, postprocessing |
 | State | Zustand (persisted) |
 | UI | Tailwind CSS 4, shadcn/ui |
-| Audio | Web Audio API |
-| Backend | Supabase (rooms, albums, storage, RLS) |
+| Backend | Supabase schema (not wired up yet) |
 
 ## Quick start
 
@@ -36,7 +39,7 @@ Requires **Node ≥ 20.9**. Useful scripts:
 
 ```sh
 npm run build
-npm test        # Vitest: collection, sharing, visitor mode, models
+npm test        # Vitest: artworks config, room layout, models
 npm run check   # headless Chrome: screenshots, drag artifact scan, FPS
 ```
 

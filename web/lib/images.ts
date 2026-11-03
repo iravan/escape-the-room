@@ -1,6 +1,5 @@
-// Album images live in IndexedDB (localStorage is too small for covers), keyed by a short random file name.
-const DB = "my-room", STORE = "images";
-export const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+// Uploaded model files live in IndexedDB (localStorage is too small), keyed by a short random file name.
+const DB = "my-gallery", STORE = "images";
 
 function db() {
   return new Promise<IDBDatabase>((resolve, reject) => {
@@ -28,14 +27,3 @@ export const getImage = (name: string) =>
   name.startsWith(VISIT) ? Promise.resolve(visitImages.get(name)) : tx<Blob | undefined>("readonly", (s) => s.get(name));
 export const putImage = (name: string, blob: Blob) => tx("readwrite", (s) => s.put(blob, name));
 
-export function checkSize(bytes: number) {
-  if (bytes > MAX_IMAGE_BYTES) throw new Error(`Image is ${(bytes / 1048576).toFixed(1)} MB; the limit is 10 MB.`);
-}
-
-// Image bytes (e.g. from a file picker) → stored name. Throws if too big.
-export async function importImage(blob: Blob) {
-  checkSize(blob.size);
-  const name = crypto.randomUUID().replace(/-/g, "").slice(0, 8) + ".img";
-  await putImage(name, blob);
-  return name;
-}

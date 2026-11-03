@@ -20,8 +20,8 @@ const notoJP = Noto_Sans_JP({ weight: ["400", "700"], preload: false, display: "
 const notoKR = Noto_Sans_KR({ weight: ["400", "700"], preload: false, display: "swap", variable: "--font-cjk-kr" });
 
 export const metadata: Metadata = {
-  title: "My Room",
-  description: "A neon bedroom for your vinyl collection.",
+  title: "My Gallery",
+  description: "A 3D room for showcasing artworks.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

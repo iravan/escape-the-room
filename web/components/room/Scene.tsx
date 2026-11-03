@@ -9,21 +9,16 @@ import { PostFX } from "./PostFX";
 import { Items } from "./Items";
 import { Cables } from "./Cables";
 import { Outside } from "./City";
-import { Records } from "./Records";
+import { Artworks } from "./Artworks";
 import { Tooltip } from "./Clickable";
-import { Inspector } from "./Inspector";
 import { SelectionBox } from "./SelectionBox";
 import { DecorModels } from "./Decor";
 import { ShellModels } from "./Shell";
 import { BudgetProbe } from "./BudgetProbe";
 import { useLayout } from "@/lib/room";
 import { EditPanel } from "@/components/hud/EditPanel";
-import { AudioDriver } from "./AudioDriver";
-import { InspectPanel } from "@/components/hud/InspectPanel";
-import { TurntablePanel } from "@/components/hud/TurntablePanel";
+import { ArtworkPanel } from "@/components/hud/ArtworkPanel";
 import { TouchControls } from "@/components/hud/TouchControls";
-import { CratePanel } from "@/components/hud/CratePanel";
-import { AlbumEditor } from "@/components/hud/AlbumEditor";
 import { Hud } from "@/components/hud/Hud";
 import { useGame } from "@/lib/store";
 
@@ -41,15 +36,13 @@ export default function Scene() {
         <Outside />
         <Skirting />
         <Cables />
-        <Records />
-        <Inspector />
+        <Artworks />
         <DecorModels />
         <ShellModels />
       </Suspense>
       <CameraRig />
       <SelectionBox />
       <BudgetProbe />
-      <AudioDriver />
       <PostFX />
     </Canvas>
     <Hud />
@@ -57,13 +50,10 @@ export default function Scene() {
     {!hideUI && !title && (
       <>
         <Tooltip />
-        <InspectPanel />
-        <TurntablePanel />
-        <CratePanel />
+        <ArtworkPanel />
         <EditPanel />
       </>
     )}
-    <AlbumEditor />
     </>
   );
 }

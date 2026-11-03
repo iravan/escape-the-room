@@ -8,7 +8,7 @@ import { DEFAULT_SIZE, liveHomes, ON_WALL, poseOf, SIZE_RANGE, useLayout, type P
 import { Slider } from "@/components/ui/slider";
 import { DEFAULT_STYLE, STYLE_IDS, STYLES } from "@/lib/styles";
 import { finishDefaults } from "@/lib/config";
-import { typing, useGame } from "@/lib/store";
+import { typing } from "@/lib/store";
 import { Panel } from "./Panel";
 import { ITEMS } from "@/items/registry";
 import { ROOM_BUDGET, useBudget } from "@/lib/budget";
@@ -21,7 +21,7 @@ import { applyLook, kindOf, useLibrary } from "@/lib/library";
 const nameOf = (id: string) => useLayout.getState().models[id]?.name ?? ITEMS[id]?.name ?? id[0].toUpperCase() + id.slice(1);
 const STEP = Math.PI / 12; // 15°
 
-export const enterEdit = () => { useGame.getState().setView("room"); useLayout.setState({ editing: true, selected: null }); };
+export const enterEdit = () => { useLayout.setState({ editing: true, selected: null }); };
 const exitEdit = () => useLayout.setState({ editing: false, selected: null, dragging: false });
 
 // Change the selected item's pose (one undo step each).

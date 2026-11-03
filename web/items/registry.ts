@@ -16,15 +16,12 @@ import pc from "./pc/item";
 import bin from "./bin/item";
 import chair from "./chair/item";
 import cabinet from "./cabinet/item";
-import turntable from "./turntable/item";
-import crate from "./crate/item";
 import window from "./window/item";
 import windowCovering from "./window-covering/item";
 import door from "./door/item";
 import closet from "./closet/item";
 import lightSwitch from "./switch/item";
 import socket from "./socket/item";
-import frames from "./frames/item";
 import wall_shelf from "./wall-shelf/item";
 import poster from "./poster/item";
 import rug from "./rug/item";
@@ -55,15 +52,12 @@ export const ITEMS: Record<string, ItemDef> = Object.fromEntries(
     bin,
     chair,
     cabinet,
-    turntable,
-    crate,
     window,
     windowCovering,
     door,
     closet,
     lightSwitch,
     socket,
-    frames,
     wall_shelf,
     poster,
     rug,
