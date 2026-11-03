@@ -3,12 +3,10 @@
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { stick, useGame } from "@/lib/store";
-import { useLayout } from "@/lib/room";
 
 const R = 36; // stick travel, px
 
-// Walking on a touch screen: drag the knob like WASD (up = forward), bottom right. Only for touch (coarse) pointers,
-// and not in edit mode, where the edit panel takes that side.
+// Walking on a touch screen: drag the knob like WASD (up = forward), bottom right. Only for touch (coarse) pointers.
 function MoveStick() {
   const [at, setAt] = useState<[number, number]>([0, 0]), origin = useRef<[number, number] | null>(null);
   const move = (x: number, y: number) => {
@@ -37,11 +35,10 @@ function MoveStick() {
 
 // Touch: the move stick, and a way out of showcase mode.
 export function TouchControls() {
-  const hideUI = useGame((s) => s.hideUI), title = useGame((s) => s.title), editing = useLayout((s) => s.editing);
+  const hideUI = useGame((s) => s.hideUI), title = useGame((s) => s.title);
   if (title) return null;
   if (hideUI) return (
     <Button size="sm" variant="outline" className="fixed bottom-3 right-3 bg-black/50 opacity-70" onClick={() => useGame.setState({ hideUI: false })}>Show controls</Button>
   );
-  if (editing) return null;
   return <MoveStick />;
 }

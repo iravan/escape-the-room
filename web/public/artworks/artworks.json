@@ -8,10 +8,7 @@
       "year": "2026",
       "medium": "Digital",
       "description": "A sample landscape. Replace this file and its entry with your own artwork.",
-      "wall": "back",
-      "at": 1.2,
-      "height": 1.6,
-      "width": 0.9
+      "spot": "w1"
     },
     {
       "id": "blue-composition",
@@ -21,10 +18,7 @@
       "year": "2025",
       "medium": "Acrylic on canvas",
       "description": "Blocks of primary colour on a cream ground.\n\nDescriptions can span several paragraphs.",
-      "wall": "right",
-      "at": -1.0,
-      "height": 1.55,
-      "width": 0.5
+      "spot": "w3"
     },
     {
       "id": "green-hills",
@@ -34,10 +28,7 @@
       "year": "2024",
       "medium": "Gouache",
       "description": "Rolling hills under a pale sun.",
-      "wall": "left",
-      "at": -0.3,
-      "height": 1.5,
-      "width": 0.6
+      "spot": "n1"
     }
   ]
 }

@@ -5,40 +5,31 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Slider } from "@/components/ui/slider";
 import { typing, useGame } from "@/lib/store";
-import { styleOf } from "@/lib/styles";
 import { takePhoto } from "@/lib/photo";
 import { Panel } from "./Panel";
-import { enterEdit } from "./EditPanel";
-import { useLayout } from "@/lib/room";
 
 const HELP = "Drag to look; WASD or the stick (bottom right) to move. Click an artwork to read about it.";
 const one = (v: number | readonly number[]) => (Array.isArray(v) ? v[0] : v) as number;
 
-// Neon double-glow title over the slowly turning room; any key, click or tap enters.
+// Title over the slowly turning gallery; any key, click or tap enters.
 function Title() {
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 bg-[#05020d]/55 text-center">
-      <h1 className="relative text-6xl font-black tracking-tight text-fuchsia-500 sm:text-8xl [text-shadow:4px_3px_0_#1ae6ff,0_0_32px_#ff40c0]">MY // GALLERY</h1>
-      <p className="text-lg text-cyan-100">a room for showing your artworks</p>
-      <Button size="lg" className="mt-6 h-14 px-10 text-xl font-bold">ENTER GALLERY</Button>
-      <p className="text-sm text-violet-300/70">tap or press any key · ? for controls</p>
+    <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 bg-black/45 text-center">
+      <h1 className="text-6xl font-light uppercase tracking-[0.3em] text-white sm:text-8xl [text-shadow:0_2px_24px_rgba(0,0,0,0.5)]">My Gallery</h1>
+      <p className="text-lg text-zinc-100">two rooms and a corridor of artworks</p>
+      <Button size="lg" className="mt-6 h-14 px-10 text-xl font-bold">ENTER</Button>
+      <p className="text-sm text-zinc-300">tap or press any key · ? for controls</p>
     </div>
   );
 }
 
 function LeftPanel() {
-  const preset = useGame((s) => s.preset), lamp = useGame((s) => s.lamp);
-  const style = useLayout((s) => s.style);
-  const g = useGame.getState();
   return (
     <Panel side="left">
       <p><b className="text-cyan-300">My Gallery</b><br /><span className="text-zinc-400">{HELP}</span></p>
       <div className="grid gap-1">
-        <Button size="sm" variant="outline" onClick={g.cyclePreset}>Light: {styleOf(style).presets[preset % 3].name} [L]</Button>
-        <Button size="sm" variant="outline" onClick={g.toggleLamp}>Lamp: {lamp ? "on" : "off"}</Button>
         <Button size="sm" variant="outline" onClick={takePhoto}>Photo [P]</Button>
         <Button size="sm" variant="outline" onClick={() => useGame.setState({ hideUI: true })}>Showcase mode [H]</Button>
-        <Button size="sm" variant="outline" onClick={enterEdit}>Edit room</Button>
         <div className="grid grid-cols-2 gap-1">
           <Button size="sm" variant="outline" onClick={() => useGame.setState({ dialog: "settings" })}>Settings</Button>
           <Button size="sm" variant="outline" onClick={() => useGame.setState({ dialog: "controls" })}>Controls [?]</Button>
@@ -49,7 +40,7 @@ function LeftPanel() {
 }
 
 const CONTROLS: [string, string][] = [
-  ["Everywhere", "L lighting · P photo · H hide UI (Show controls brings it back) · ? this help"],
+  ["Everywhere", "P photo · H hide UI (Show controls brings it back) · ? this help"],
   ["Room", "Drag to look, WASD or arrows to move, click anything that lights up."],
   ["Artworks", "Click an artwork to read its description. Esc or Close shuts it."],
   ["Touch screens", "Tap = click, drag = look, the stick at the bottom right = walk. Every panel has a button to close it, no keyboard needed."],
@@ -81,7 +72,7 @@ function Dialogs() {
                 <Button key={q} size="sm" variant={quality === i ? "default" : "outline"} onClick={() => useGame.getState().setQuality(i as 0 | 1 | 2)}>{q}</Button>
               ))}
             </div>
-            <p className="text-xs text-zinc-400">Low: no glow, no lamp shadows. High: glow, soft shadows, smoothing.</p>
+            <p className="text-xs text-zinc-400">Low: no glow, no shadows. High: glow, soft shadows, smoothing.</p>
           </div>
           <Button onClick={close}>Close</Button>
         </DialogContent>
@@ -98,7 +89,6 @@ function useHudKeys() {
       const s = useGame.getState();
       if (s.title) { enter(); return; }
       if (s.dialog) return;
-      if (e.key === "l") s.cyclePreset();
       if (e.key === "h") useGame.setState({ hideUI: !s.hideUI });
       if (e.key === "p") takePhoto();
       if (e.key === "?" || e.key === "F1") { e.preventDefault(); useGame.setState({ dialog: "controls" }); }

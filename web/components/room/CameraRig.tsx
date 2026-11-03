@@ -4,9 +4,8 @@ import { useEffect, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { stick, typing, useGame } from "@/lib/store";
-import { useLayout } from "@/lib/room";
+import { DEG, walkable } from "@/lib/gallery";
 
-const DEG = Math.PI / 180;
 const tmpPos = new THREE.Vector3();
 const tmpQuat = new THREE.Quaternion();
 const tmpEuler = new THREE.Euler(0, 0, 0, "YXZ");
@@ -27,7 +26,7 @@ export function CameraRig() {
     };
     const move = (e: PointerEvent) => {
       const s = useGame.getState();
-      if (!last || last.id !== e.pointerId || s.title || useLayout.getState().dragging) return;
+      if (!last || last.id !== e.pointerId || s.title) return;
       // Unity read mouse axes ×3: ~0.3° per pixel at sensitivity 1. FPS-style: drag right turns right, drag down looks down.
       s.look((e.clientX - last.x) * 0.3 * s.sensitivity, (e.clientY - last.y) * 0.3 * s.sensitivity);
       last = { id: e.pointerId, x: e.clientX, y: e.clientY };
@@ -74,9 +73,10 @@ export function CameraRig() {
         // forward is -z in three; rotate (h, -v) by the yaw
         const dx = (h * Math.cos(y) - v * Math.sin(y)) * step;
         const dz = (-h * Math.sin(y) - v * Math.cos(y)) * step;
+        // Walk the floor plan, sliding along walls: try the full step, then each axis on its own.
         const [x, py, z] = s.roomPos;
-        const { w, d } = useLayout.getState().size, mx = w / 2 - 0.3, mz = d / 2 - 0.3;
-        s.setRoomPos([Math.min(mx, Math.max(-mx, x + dx)), py, Math.min(mz, Math.max(-mz, z + dz))]);
+        const to = [[x + dx, z + dz], [x + dx, z], [x, z + dz]].find(([nx, nz]) => walkable(nx, nz));
+        if (to) s.setRoomPos([to[0], py, to[1]]);
       }
       tmpPos.set(...s.roomPos);
       tmpQuat.setFromEuler(tmpEuler.set(-s.pitch * DEG, -s.yaw * DEG, 0));

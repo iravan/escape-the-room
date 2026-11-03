@@ -1,50 +1,53 @@
 "use client";
 
+import { useEffect, useMemo, useRef } from "react";
 import { useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { Clickable } from "./Clickable";
-import { useLayout } from "@/lib/room";
-import { ARTWORKS, artworkUrl, useArtwork, type Artwork, type Wall } from "@/lib/artworks";
-import type { Vec3 } from "@/lib/store";
+import { H } from "@/lib/gallery";
+import { ARTWORKS, artworkUrl, useArtwork, type Artwork } from "@/lib/artworks";
 
-const FRAME = 0.03, DEPTH = 0.025;
+const FRAME = 0.035, DEPTH = 0.03, MAT = 0.14; // silver moulding, white mount (share of the frame's width)
 
-// Wall centre and the turn that faces local +z into the room; local +x is then "to your right" facing the wall.
-function wallPose(wall: Wall, w: number, d: number): { p: Vec3; rot: number } {
-  if (wall === "front") return { p: [0, 0, d / 2], rot: Math.PI };
-  if (wall === "left") return { p: [-w / 2, 0, 0], rot: Math.PI / 2 };
-  if (wall === "right") return { p: [w / 2, 0, 0], rot: -Math.PI / 2 };
-  return { p: [0, 0, -d / 2], rot: 0 };
-}
-
+// Framed like the original gallery: thin silver moulding, wide white mount, the picture in the middle.
 function Piece({ a }: { a: Artwork }) {
   const map = useTexture(artworkUrl(a), (t) => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; });
   const img = map.image as { width: number; height: number };
-  const w = a.width, h = (w * img.height) / img.width;
+  const w = a.width, mount = w * MAT, pw = w - 2 * (FRAME + mount), ph = (pw * img.height) / img.width, h = ph + 2 * (FRAME + mount);
   return (
-    <Clickable hint={a.title} onTap={() => useArtwork.setState({ open: a.id })} position={[a.at, a.height, DEPTH / 2]}>
+    <Clickable hint={a.title} onTap={() => useArtwork.setState({ open: a.id })} position={[0, 0, DEPTH / 2]}>
       <mesh castShadow>
-        <boxGeometry args={[w + FRAME * 2, h + FRAME * 2, DEPTH]} />
-        <meshStandardMaterial color="#1a1a1a" roughness={0.6} />
+        <boxGeometry args={[w, h, DEPTH]} />
+        <meshStandardMaterial color="#d3d5d8" metalness={0.35} roughness={0.35} />
       </mesh>
-      <mesh position={[0, 0, DEPTH / 2 + 0.001]}>
-        <planeGeometry args={[w, h]} />
-        <meshStandardMaterial map={map} roughness={0.8} />
-      </mesh>
+      <mesh position={[0, 0, DEPTH / 2 + 0.001]}><planeGeometry args={[w - 2 * FRAME, h - 2 * FRAME]} /><meshStandardMaterial color="#f4f3ef" roughness={0.9} /></mesh>
+      <mesh position={[0, 0, DEPTH / 2 + 0.002]}><planeGeometry args={[pw, ph]} /><meshStandardMaterial map={map} roughness={0.8} /></mesh>
     </Clickable>
   );
 }
 
-// Every artwork from the config, hung on its wall.
+// The spot's track light (Gallery.tsx) switched on: light pooling on the picture.
+function Light({ a }: { a: Artwork }) {
+  const light = useRef<THREE.SpotLight>(null), target = useMemo(() => new THREE.Object3D(), []);
+  useEffect(() => { if (light.current) light.current.target = target; }, [target]);
+  return (
+    <>
+      <primitive object={target} position={[0, a.height - 0.15, 0]} />
+      <spotLight ref={light} position={[0, H.ceiling - 0.1, 0.95]} angle={0.42} penumbra={0.8} intensity={6} distance={4} decay={1.4} color="#fff3e0" />
+    </>
+  );
+}
+
+// Every artwork from the config, hung in its spot with its own spotlight.
 export function Artworks() {
-  const { w, d } = useLayout((s) => s.size);
   return (
     <>
       {ARTWORKS.map((a) => {
-        const { p, rot } = wallPose(a.wall, w, d);
+        const [x, , z] = a.spot.position;
         return (
-          <group key={a.id} position={p} rotation={[0, rot, 0]}>
-            <Piece a={a} />
+          <group key={a.id} position={[x, 0, z]} rotation={[0, a.spot.rotation, 0]}>
+            <group position={[0, a.height, 0]}><Piece a={a} /></group>
+            <Light a={a} />
           </group>
         );
       })}

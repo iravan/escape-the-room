@@ -6,7 +6,7 @@ Next.js 16 + React Three Fiber + Zustand + Tailwind + shadcn/ui. Artworks: `publ
 npm install
 npm run dev     # http://localhost:3000
 npm run build
-npm test        # Vitest: artworks config, room layout, library, models
+npm test        # Vitest: artworks config, floor plan
 npm run check   # needs a running server (default http://127.0.0.1:3100/): room screenshot, drag artifact scan, FPS
 ```
 
