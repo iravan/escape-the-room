@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { MenuIcon, XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Slider } from "@/components/ui/slider";
@@ -8,7 +9,7 @@ import { typing, useGame } from "@/lib/store";
 import { takePhoto } from "@/lib/photo";
 import { Panel } from "./Panel";
 
-const HELP = "Drag to look; WASD or the stick (bottom right) to move. Click an artwork to read about it.";
+const HELP = "Drag to look; WASD or the stick (bottom left) to move. Click an artwork to read about it.";
 const one = (v: number | readonly number[]) => (Array.isArray(v) ? v[0] : v) as number;
 
 // Title over the slowly turning gallery; any key, click or tap enters.
@@ -23,9 +24,16 @@ function Title() {
   );
 }
 
+// On touch screens the menu folds away behind a ☰ button (top left) so the gallery fills the screen.
 function LeftPanel() {
+  const [open, setOpen] = useState(false);
   return (
-    <Panel side="left">
+    <>
+    <Button size="icon" variant="outline" aria-label={open ? "Hide menu" : "Show menu"} aria-expanded={open} onClick={() => setOpen(!open)}
+      className="fixed left-2.5 top-2.5 hidden bg-black/60 [@media(pointer:coarse)]:inline-flex">
+      {open ? <XIcon /> : <MenuIcon />}
+    </Button>
+    <Panel side="left" className={`[@media(pointer:coarse)]:top-14 [@media(pointer:coarse)]:max-h-[calc(100dvh-4.5rem)] ${open ? "" : "[@media(pointer:coarse)]:hidden"}`}>
       <p><b className="text-cyan-300">My Gallery</b><br /><span className="text-zinc-400">{HELP}</span></p>
       <p className="text-[11px] leading-snug text-zinc-500">
         Gallery: <a className="underline" href="https://sketchfab.com/3d-models/richards-art-gallery-audio-tour-0e3e19faa6474fd5974e6a7ed1b221d8" target="_blank" rel="noreferrer">Richard&apos;s Art Gallery – Audio Tour</a> by{" "}
@@ -41,6 +49,7 @@ function LeftPanel() {
         </div>
       </div>
     </Panel>
+    </>
   );
 }
 
@@ -48,7 +57,7 @@ const CONTROLS: [string, string][] = [
   ["Everywhere", "P photo · H hide UI (Show controls brings it back) · ? this help"],
   ["Room", "Drag to look, WASD or arrows to move, click anything that lights up."],
   ["Artworks", "Click an artwork to read its description. Esc or Close shuts it."],
-  ["Touch screens", "Tap = click, drag = look, the stick at the bottom right = walk. Every panel has a button to close it, no keyboard needed."],
+  ["Touch screens", "Tap = click, drag = look, the stick at the bottom left = walk, ☰ shows or hides the menu. Every panel has a button to close it, no keyboard needed."],
 ];
 
 function Dialogs() {
