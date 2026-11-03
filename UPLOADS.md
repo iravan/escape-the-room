@@ -13,7 +13,7 @@ a server yet.
 
 ## 2. Storage — `web/lib/images.ts`
 - Given a random name like `abcd1234.glb`.
-- `putImage(name, blob)` writes it to IndexedDB database `my-room`, store `images` (the same store as album covers).
+- `putImage(name, blob)` writes it to IndexedDB database `my-room`, store `images` .
 - Files are never deleted (so saved library looks can always point at them).
 
 ## 3. References in the room — `web/lib/room.ts`
@@ -27,13 +27,6 @@ a server yet.
 - Drops lights in the model, stands it on the floor, rescales anything over 2.5 m or under 5 cm to about 60 cm.
 - Cached per file name, so copies of one upload share it.
 
-## 5. Sharing and visiting — `web/lib/share.ts`
-- Exporting/sharing a room embeds every referenced model file (base64) in the share file — why shares get big
-  (capped at 100 MB).
-- Visiting a friend's room: their files stay in memory only (`visit:` names), never written to your IndexedDB. Saving
-  one of their looks to your library copies the file into your own store first.
-
 ## Limitation
 Everything is per browser: clearing site data, another browser/device, or moving the site to a new address (new
-origin) loses uploaded models. Fix: store uploads in **Supabase Storage** and keep only the name in the room — waiting on
-the Supabase setup choice (see CUSTOMIZATION.md).
+origin) loses uploaded models. Artworks are not affected: they ship with the site from `web/public/artworks/`.

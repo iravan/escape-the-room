@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { ITEMS } from "@/items/registry";
 import { normalizeShells, useLayout, type Shells } from "./room";
-import { getImage, putImage, VISIT } from "./images";
 
 // Your own library of looks: an item's look as you set it up (which built-in look, its colours/materials and other
 // options, or your model in its place), saved apart from any room so it can go onto the same kind of item later —
@@ -24,10 +23,14 @@ export function normalizeLibrary(raw: unknown): LibraryEntry[] {
     if (r.options && typeof r.options === "object")
       for (const [k, v] of Object.entries(r.options as Record<string, unknown>).slice(0, 50)) if (/^[\w:-]{1,64}$/.test(k) && typeof v === "string") options[k] = v.slice(0, 64);
     const model = normalizeShells({ x: r.model }).x;
-    out.push({ id: r.id, name: typeof r.name === "string" ? r.name.slice(0, 60) : "Look", kind: r.kind, options, ...(model && !model.asset.startsWith(VISIT) ? { model } : {}) });
+    out.push({ id: r.id, name: typeof r.name === "string" ? r.name.slice(0, 60) : "Look", kind: r.kind, options, ...(model ? { model } : {}) });
   }
   return out;
 }
+
+const storage = createJSONStorage(() => ({ // read lazily: no localStorage while the server renders (or before tests stub it)
+  getItem: (k: string) => localStorage.getItem(k), setItem: (k: string, v: string) => localStorage.setItem(k, v), removeItem: (k: string) => localStorage.removeItem(k),
+}));
 
 type State = {
   entries: LibraryEntry[];
@@ -39,25 +42,17 @@ export const useLibrary = create<State>()(
   persist(
     (set) => ({
       entries: [],
-      // Save the item's look as it is now. A model from a friend's room (kept in memory only) is copied to yours first.
+      // Save the item's look as it is now.
       save: async (item, name) => {
         const L = useLayout.getState(), shell = L.shells[item];
-        let model = shell && { ...shell };
-        if (model?.asset.startsWith(VISIT)) {
-          const blob = await getImage(model.asset), mine = model.asset.slice(VISIT.length);
-          if (!blob) throw new Error("That model isn't loaded any more.");
-          await putImage(mine, blob);
-          model = { ...model, asset: mine };
-        }
+        const model = shell && { ...shell };
         const entry: LibraryEntry = { id: crypto.randomUUID().replace(/-/g, "").slice(0, 8), name: name.slice(0, 60), kind: kindOf(item), options: { ...L.options[item] }, ...(model ? { model } : {}) };
         set((s) => ({ entries: [entry, ...s.entries].slice(0, MAX) }));
         return entry;
       },
       remove: (id) => set((s) => ({ entries: s.entries.filter((e) => e.id !== id) })),
     }),
-    { name: "my-gallery-library", version: 1, storage: createJSONStorage(() => ({ // read lazily: no localStorage while the server renders
-      getItem: (k: string) => localStorage.getItem(k), setItem: (k: string, v: string) => localStorage.setItem(k, v), removeItem: (k: string) => localStorage.removeItem(k),
-    })), merge: (saved, cur) => ({ ...cur, entries: normalizeLibrary((saved as { entries?: unknown })?.entries) }) },
+    { name: "my-gallery-library", version: 1, storage, merge: (saved, cur) => ({ ...cur, entries: normalizeLibrary((saved as { entries?: unknown })?.entries) }) },
   ),
 );
 

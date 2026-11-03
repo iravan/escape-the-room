@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// CJK album titles and notes: Google's sliced CJK fonts (self-hosted by next/font), so a browser only fetches
+// CJK artwork titles and descriptions: Google's sliced CJK fonts (self-hosted by next/font), so a browser only fetches
 // the slices for characters actually on screen. Not preloaded: Latin-only rooms download nothing.
 // (next/font needs literal options, so they're repeated.)
 const notoSC = Noto_Sans_SC({ weight: ["400", "700"], preload: false, display: "swap", variable: "--font-cjk-sc" });

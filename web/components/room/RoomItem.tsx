@@ -65,7 +65,7 @@ function startDrag(id: string, home: Home, e: ThreeEvent<PointerEvent>, camera: 
 }
 
 // Renders an item where the layout puts it. Children are modelled at `home`; with no saved pose this is a no-op.
-// Several <RoomItem> with the same id (e.g. the cabinet, its spines and the turntable on it) move together.
+// Several <RoomItem> with the same id (e.g. an item and the things resting on it) move together.
 const noRaycast = () => {};
 
 export function RoomItem({ id, home, children, shellModel }: { id: string; home: Home; children: ReactNode; shellModel?: boolean }) {

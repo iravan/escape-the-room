@@ -67,8 +67,8 @@ describe("layout", () => {
       bed: { asset: "../../evil.glb", name: "x" },
       "model-12345678": { asset: "1234abcd.glb" },
       chair: { asset: "abcd1234.glb", yaw: 7 },
-    } }, "visit:");
-    expect(r.shells).toEqual({ desk: { asset: "visit:1234abcd.glb", name: "My desk", yaw: 1 }, chair: { asset: "visit:abcd1234.glb", name: "Model", yaw: 0 } });
+    } });
+    expect(r.shells).toEqual({ desk: { asset: "1234abcd.glb", name: "My desk", yaw: 1 }, chair: { asset: "abcd1234.glb", name: "Model", yaw: 0 } });
   });
 
   it("resizes the room: sizes clamped, furniture follows its walls, everything stays inside", () => {

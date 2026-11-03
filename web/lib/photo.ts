@@ -8,7 +8,7 @@ export function takePhoto() {
   requestAnimationFrame(() => {
     canvas.toBlob((blob) => {
       if (!blob) { toast.error("Couldn't take the photo."); return; }
-      const name = `vinyl-room-${new Date().toISOString().slice(0, 19).replace(/[T:]/g, "-")}.png`;
+      const name = `my-gallery-${new Date().toISOString().slice(0, 19).replace(/[T:]/g, "-")}.png`;
       const url = URL.createObjectURL(blob);
       Object.assign(document.createElement("a"), { href: url, download: name }).click();
       setTimeout(() => URL.revokeObjectURL(url), 10000);

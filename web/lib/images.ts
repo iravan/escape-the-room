@@ -19,11 +19,6 @@ async function tx<T>(mode: IDBTransactionMode, run: (s: IDBObjectStore) => IDBRe
   });
 }
 
-// A friend's room keeps its images in memory only, under "visit:" names; they never touch IndexedDB.
-export const VISIT = "visit:";
-export const visitImages = new Map<string, Blob>();
-
-export const getImage = (name: string) =>
-  name.startsWith(VISIT) ? Promise.resolve(visitImages.get(name)) : tx<Blob | undefined>("readonly", (s) => s.get(name));
+export const getImage = (name: string) => tx<Blob | undefined>("readonly", (s) => s.get(name));
 export const putImage = (name: string, blob: Blob) => tx("readwrite", (s) => s.put(blob, name));
 

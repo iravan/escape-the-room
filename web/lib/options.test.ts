@@ -1,4 +1,4 @@
-// Options from saves or shared rooms: only known parts, choices and variants survive.
+// Options from saves: only known parts, choices and variants survive.
 import { describe, expect, it } from "vitest";
 import * as THREE from "three";
 import { applyFinish, normalizeOptions } from "./options";

@@ -24,9 +24,9 @@ describe("your library of looks", () => {
     expect(L().shells["poster-2"]).toBeUndefined();
   });
 
-  it("cleans what's read back: bad entries dropped, visit-only models not kept", () => {
+  it("cleans what's read back: bad entries dropped, bad model names not kept", () => {
     expect(normalizeLibrary([
-      { id: "0123abcd", name: "Mine", kind: "bed", options: { wood: "pine", "../x": "y" }, model: { asset: "visit:abcd1234.glb", name: "M", yaw: 0 } },
+      { id: "0123abcd", name: "Mine", kind: "bed", options: { wood: "pine", "../x": "y" }, model: { asset: "../abcd1234.glb", name: "M", yaw: 0 } },
       { id: "nope", kind: "bed" },
       "junk",
     ])).toEqual([{ id: "0123abcd", name: "Mine", kind: "bed", options: { wood: "pine" } }]);

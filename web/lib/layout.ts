@@ -1,7 +1,6 @@
 import type { Vec3 } from "./store";
 
 // Where things stand, in metres (three coords = Unity's with z negated). Room is 4 × 2.8 × 4, centred on x/z.
-export const ROOM = { w: 4, h: 2.8, d: 4 };
 export const CUBBY = 0.33, BOARD = 0.02, COLS = 4, ROWS = 2;
 export const CABINET_W = COLS * CUBBY + (COLS + 1) * BOARD;
 export const CABINET_H = ROWS * CUBBY + (ROWS + 1) * BOARD;

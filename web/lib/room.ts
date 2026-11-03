@@ -73,7 +73,7 @@ function constrain(id: string, p: Pose, size: RoomSize): Pose {
 const finite = (v: unknown, lo: number, hi: number, fallback: number) =>
   typeof v === "number" && Number.isFinite(v) ? Math.min(hi, Math.max(lo, v)) : fallback;
 
-// Untrusted layout (save, share file, a friend's room) → clean poses inside the room. Bad entries are dropped.
+// Untrusted layout (an old or hand-edited save) → clean poses inside the room. Bad entries are dropped.
 export function normalizeLayout(raw: unknown, size: RoomSize = DEFAULT_SIZE): Layout {
   const out: Layout = {};
   if (!raw || typeof raw !== "object") return out;
@@ -102,19 +102,14 @@ export function normalizeModels(raw: unknown): Models {
   if (!raw || typeof raw !== "object") return out;
   for (const [id, m] of Object.entries(raw as Record<string, unknown>).slice(0, 200)) {
     const v = m as { asset?: unknown; name?: unknown };
-    if (/^model-[0-9a-f]{8}$/.test(id) && typeof v?.asset === "string" && /^(visit:)?[0-9a-f]{8}\.glb$/.test(v.asset))
+    if (/^model-[0-9a-f]{8}$/.test(id) && typeof v?.asset === "string" && /^[0-9a-f]{8}\.glb$/.test(v.asset))
       out[id] = { asset: v.asset, name: typeof v.name === "string" ? v.name.slice(0, 60) : "Model" };
   }
   return out;
 }
 
-// While visiting a friend's room their layout is shown in this store; nothing may be written to your save.
-let frozen = false;
-export const freezeLayoutSaves = (on: boolean) => { frozen = on; };
-const storage = createJSONStorage(() => ({
-  getItem: (k: string) => localStorage.getItem(k),
-  setItem: (k: string, v: string) => { if (!frozen) localStorage.setItem(k, v); },
-  removeItem: (k: string) => { if (!frozen) localStorage.removeItem(k); },
+const storage = createJSONStorage(() => ({ // read lazily: no localStorage while the server renders (or before tests stub it)
+  getItem: (k: string) => localStorage.getItem(k), setItem: (k: string, v: string) => localStorage.setItem(k, v), removeItem: (k: string) => localStorage.removeItem(k),
 }));
 
 // Built-in items whose look is replaced by an uploaded model: item id → model file, name, and a quarter-turn yaw.
@@ -124,7 +119,7 @@ export function normalizeShells(raw: unknown): Shells {
   if (!raw || typeof raw !== "object") return out;
   for (const [id, m] of Object.entries(raw as Record<string, unknown>).slice(0, 200)) {
     const v = m as { asset?: unknown; name?: unknown; yaw?: unknown };
-    if (/^[\w-]{1,64}$/.test(id) && !id.startsWith("model-") && typeof v?.asset === "string" && /^(visit:)?[0-9a-f]{8}\.glb$/.test(v.asset))
+    if (/^[\w-]{1,64}$/.test(id) && !id.startsWith("model-") && typeof v?.asset === "string" && /^[0-9a-f]{8}\.glb$/.test(v.asset))
       out[id] = { asset: v.asset, name: typeof v.name === "string" ? v.name.slice(0, 60) : "Model", yaw: [0, 1, 2, 3].includes(v.yaw as number) ? (v.yaw as number) : 0 };
   }
   return out;
@@ -137,12 +132,11 @@ export function normalizeHidden(raw: unknown): string[] {
 }
 
 export type RoomData = { hidden: string[]; style: StyleId; size: RoomSize; items: Layout; options: Options; models: Models; shells: Shells };
-// Untrusted room layout (a share file): every part cleaned; model files optionally renamed (visit: prefix).
-export function normalizeRoom(raw: unknown, assetPrefix = ""): RoomData {
+// Untrusted room layout (a saved one may be old or hand-edited): every part cleaned.
+export function normalizeRoom(raw: unknown): RoomData {
   const r = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
   const models = normalizeModels(r.models);
   const shells = normalizeShells(r.shells);
-  for (const m of [...Object.values(models), ...Object.values(shells)]) m.asset = assetPrefix + m.asset.replace(/^visit:/, "");
   const size = normalizeSize(r.size), style = (typeof r.style === "string" && r.style in STYLES ? r.style : DEFAULT_STYLE) as StyleId;
   return { hidden: normalizeHidden(r.hidden), style, size, items: normalizeLayout(r.items, size), options: normalizeOptions(r.options), models, shells };
 }

@@ -1,4 +1,4 @@
-// Headless-Chrome check: screenshots of every view, a camera drag scanned for flashes and 64-px tile artifacts, FPS.
+// Headless-Chrome check: a screenshot of the room, a camera drag scanned for flashes and 64-px tile artifacts, FPS.
 // No dependencies: Chrome DevTools Protocol over the built-in WebSocket, PNGs decoded with zlib.
 //   node --experimental-websocket scripts/check.mjs [url] [outdir]       (Node 22+ needs no flag)
 //   node scripts/check.mjs --analyze a.png b.png ...                     (score saved frames)
@@ -102,11 +102,6 @@ ws.onmessage = (e) => {
 };
 const send = (method, params = {}) => new Promise((r) => { pending[++id] = r; ws.send(JSON.stringify({ id, method, params })); });
 const grab = async () => Buffer.from((await send("Page.captureScreenshot", { format: "png" })).data, "base64");
-const key = async (k) => {
-  const code = /\d/.test(k) ? `Digit${k}` : k;
-  await send("Input.dispatchKeyEvent", { type: "keyDown", key: k, code, windowsVirtualKeyCode: k === "Escape" ? 27 : k.charCodeAt(0) });
-  await send("Input.dispatchKeyEvent", { type: "keyUp", key: k, code });
-};
 const mouse = (type, x, y) => send("Input.dispatchMouseEvent", { type, x, y, button: "left", buttons: type === "mouseReleased" ? 0 : 1, clickCount: 1 });
 
 await send("Runtime.enable");
@@ -116,11 +111,10 @@ await mouse("mousePressed", 640, 360); await mouse("mouseReleased", 640, 360); /
 await sleep(1500);
 
 const report = { url, views: [], drag: {}, fps: 0, errors: [] };
-for (const [k, name] of [["2", "turntable"], ["3", "crate"], ["4", "shelf"], ["1", "room"]]) {
-  await key(k); await sleep(2000);
+{
   const png = await grab();
-  fs.writeFileSync(path.join(out, `view-${name}.png`), png);
-  report.views.push({ name, tile: +tileScore(decodePng(png)).toFixed(2) });
+  fs.writeFileSync(path.join(out, "view-room.png"), png);
+  report.views.push({ name: "room", tile: +tileScore(decodePng(png)).toFixed(2) });
 }
 
 // Turn the camera in small steps, one frame each way, scanning every frame.
