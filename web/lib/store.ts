@@ -22,7 +22,7 @@ type State = {
   title: boolean; // title screen showing (every load)
   hideUI: boolean; // showcase mode
   menu: boolean; // touch screens: menu panel shown (not saved)
-  dialog: "" | "settings" | "controls";
+  dialog: "" | "settings" | "controls" | "about";
   look: (dYaw: number, dPitch: number) => void;
   setRoomPos: (p: Vec3) => void;
 };

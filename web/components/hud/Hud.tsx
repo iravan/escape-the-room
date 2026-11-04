@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Slider } from "@/components/ui/slider";
 import { typing, useGame } from "@/lib/store";
 import { takePhoto } from "@/lib/photo";
-import { useArtwork } from "@/lib/artworks";
+import { EXHIBITION, useArtwork } from "@/lib/artworks";
 import { Panel } from "./Panel";
 
 const HELP = "Drag to look; WASD or the stick (bottom left) to move. Click an artwork to read about it.";
@@ -17,9 +17,10 @@ const one = (v: number | readonly number[]) => (Array.isArray(v) ? v[0] : v) as 
 function Title() {
   return (
     <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 bg-background/60 text-center backdrop-blur-[2px]">
-      <h1 className="text-6xl font-light uppercase tracking-[0.3em] text-foreground sm:text-8xl">My Gallery</h1>
+      <p className="text-sm uppercase tracking-[0.4em] text-muted-foreground">My Gallery presents</p>
+      <h1 className="text-5xl font-light uppercase tracking-[0.2em] text-foreground sm:text-7xl">{EXHIBITION.title}</h1>
       <div className="h-1 w-40 bg-foreground" />
-      <p className="text-lg text-wood">two rooms and a corridor of artworks</p>
+      {EXHIBITION.subtitle && <p className="text-lg text-wood">{EXHIBITION.subtitle}</p>}
       <Button size="lg" className="mt-6 h-14 px-10 text-xl font-bold">ENTER</Button>
       <p className="text-sm text-muted-foreground">tap or press any key · ? for controls</p>
     </div>
@@ -38,13 +39,14 @@ function LeftPanel() {
       {open ? <XIcon /> : <MenuIcon />}
     </Button>
     <Panel side="left" className={`[@media(pointer:coarse)]:left-auto [@media(pointer:coarse)]:right-2.5 [@media(pointer:coarse)]:top-14 [@media(pointer:coarse)]:max-h-[calc(100dvh-4.5rem)] ${open ? "" : "[@media(pointer:coarse)]:hidden"}`}>
-      <p><b className="text-wood">My Gallery</b><br /><span className="text-muted-foreground">{HELP}</span></p>
+      <p><b className="text-wood">{EXHIBITION.title}</b>{EXHIBITION.subtitle && <><br /><span className="text-xs">{EXHIBITION.subtitle}</span></>}<br /><span className="text-muted-foreground">{HELP}</span></p>
       <p className="text-[11px] leading-snug text-muted-foreground">
         Gallery: <a className="underline" href="https://sketchfab.com/3d-models/richards-art-gallery-audio-tour-0e3e19faa6474fd5974e6a7ed1b221d8" target="_blank" rel="noreferrer">Richard&apos;s Art Gallery – Audio Tour</a> by{" "}
         <a className="underline" href="https://sketchfab.com/shinymagic" target="_blank" rel="noreferrer">shinymagic</a>,{" "}
         <a className="underline" href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a> (optimised)
       </p>
       <div className="grid gap-1">
+        {EXHIBITION.intro && <Button size="sm" onClick={() => useGame.setState({ dialog: "about" })}>About the exhibition</Button>}
         <Button size="sm" variant="outline" onClick={takePhoto}>Photo [P]</Button>
         <Button size="sm" variant="outline" onClick={() => useGame.setState({ hideUI: true })}>Showcase mode [H]</Button>
         <div className="grid grid-cols-2 gap-1">
@@ -60,7 +62,7 @@ function LeftPanel() {
 const CONTROLS: [string, string][] = [
   ["Everywhere", "P photo · H hide UI (Show controls brings it back) · ? this help"],
   ["Room", "Drag to look, WASD or arrows to move, click anything that lights up."],
-  ["Artworks", "Click an artwork to read its description. Esc or Close shuts it."],
+  ["Artworks", "Click an artwork for its full description. Esc or Close shuts it."],
   ["Touch screens", "Tap = click, drag = look, the stick at the bottom left = walk, ☰ (top right) shows or hides the menu. Every panel has a button to close it, no keyboard needed."],
 ];
 
@@ -69,6 +71,17 @@ function Dialogs() {
   const close = () => useGame.setState({ dialog: "" });
   return (
     <>
+      <Dialog open={dialog === "about"} onOpenChange={(o) => { if (!o) close(); }}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Exhibition</p>
+            <DialogTitle className="text-2xl font-light uppercase tracking-[0.15em]">{EXHIBITION.title}</DialogTitle>
+            {EXHIBITION.subtitle && <p className="text-wood">{EXHIBITION.subtitle}</p>}
+          </DialogHeader>
+          <p className="whitespace-pre-wrap text-sm leading-relaxed">{EXHIBITION.intro}</p>
+          <Button onClick={close}>Enter the gallery</Button>
+        </DialogContent>
+      </Dialog>
       <Dialog open={dialog === "controls"} onOpenChange={(o) => { if (!o) close(); }}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader><DialogTitle>Controls</DialogTitle></DialogHeader>

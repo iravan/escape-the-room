@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
-  <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b1055"/><stop offset=".55" stop-color="#d53369"/><stop offset="1" stop-color="#ffb56b"/></linearGradient></defs>
-  <rect width="1200" height="500" fill="url(#sky)"/>
-  <circle cx="600" cy="470" r="130" fill="#ffd27f"/>
-  <rect y="480" width="1200" height="320" fill="#1b2a49"/>
-  <g fill="#ffd27f" opacity=".7"><rect x="520" y="510" width="160" height="8"/><rect x="545" y="545" width="110" height="7"/><rect x="570" y="580" width="60" height="6"/></g>
-</svg>

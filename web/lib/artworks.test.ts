@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ARTWORKS, normalizeArtworks } from "./artworks";
+import { ARTWORKS, normalizeArtworks, parseDimensions } from "./artworks";
 import { SPOTS, walkable } from "./gallery";
 
 describe("artworks config", () => {
@@ -23,6 +23,15 @@ describe("artworks config", () => {
   it("stops when every spot is taken", () => {
     const many = Array.from({ length: SPOTS.length + 3 }, (_, i) => ({ image: `${i}.jpg` }));
     expect(normalizeArtworks({ artworks: many }).length).toBe(SPOTS.length);
+  });
+
+  it("reads real sizes, height × width, into metres", () => {
+    expect(parseDimensions("73.7 × 92.1 cm")).toEqual([0.921, 0.737]);
+    expect(parseDimensions("10 x 20 in")).toEqual([0.508, 0.254]);
+    expect(parseDimensions("500 × 600 mm")).toEqual([0.6, 0.5]);
+    expect(parseDimensions("")).toBeNull();
+    expect(parseDimensions("9000 × 9000 cm")).toBeNull();
+    expect(normalizeArtworks({ artworks: [{ image: "a.jpg", dimensions: "50 × 40 cm" }] })[0].size).toEqual([0.4, 0.5]);
   });
 
   it("loads the shipped config", () => {
