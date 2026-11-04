@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { stick, typing, useGame } from "@/lib/store";
-import { DEG, walkable } from "@/lib/gallery";
+import { DEG, START, walkable } from "@/lib/gallery";
 
 const tmpPos = new THREE.Vector3();
 const tmpQuat = new THREE.Quaternion();
@@ -14,6 +14,14 @@ const tmpEuler = new THREE.Euler(0, 0, 0, "YXZ");
 export function CameraRig() {
   const { camera, gl, events } = useThree();
   const held = useRef(new Set<string>());
+
+  // A saved position can be somewhere you can no longer stand (furniture added, an older layout): start at the entrance.
+  useEffect(() => {
+    const unsub = useGame.persist.onFinishHydration((s) => { if (!walkable(s.roomPos[0], s.roomPos[2])) useGame.setState({ roomPos: START.position, yaw: START.yaw }); });
+    const s = useGame.getState();
+    if (useGame.persist.hasHydrated() && !walkable(s.roomPos[0], s.roomPos[2])) useGame.setState({ roomPos: START.position, yaw: START.yaw });
+    return unsub;
+  }, []);
 
   useEffect(() => {
     const el = gl.domElement;
@@ -75,7 +83,8 @@ export function CameraRig() {
         const dz = (-h * Math.sin(y) - v * Math.cos(y)) * step;
         // Walk the floor plan, sliding along walls: try the full step, then each axis on its own.
         const [x, py, z] = s.roomPos;
-        const to = [[x + dx, z + dz], [x + dx, z], [x, z + dz]].find(([nx, nz]) => walkable(nx, nz));
+        // (Already somewhere blocked? Then any step goes, so you can always walk out.)
+        const to = walkable(x, z) ? [[x + dx, z + dz], [x + dx, z], [x, z + dz]].find(([nx, nz]) => walkable(nx, nz)) : [x + dx, z + dz];
         if (to) s.setRoomPos([to[0], py, to[1]]);
       }
       tmpPos.set(...s.roomPos);
