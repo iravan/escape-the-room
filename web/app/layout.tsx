@@ -21,7 +21,7 @@ const notoKR = Noto_Sans_KR({ weight: ["400", "700"], preload: false, display: "
 
 export const metadata: Metadata = {
   title: "Escape the Room",
-  description: "A 3D escape room: solve puzzles in a gallery to learn Japanese hiragana and get out.",
+  description: "A 3D escape room: solve puzzles in a gallery to learn Japanese or Korean and get out.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

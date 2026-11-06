@@ -1,8 +1,8 @@
 {
   "exhibition": {
     "title": "Escape the Room",
-    "subtitle": "Learn hiragana to get out",
-    "intro": "You are locked in the gallery after closing time. You start by the blue door; the way to open it is a hiragana chart on the table at the far end of the west room, but fifteen of its kana are missing — a different fifteen each time you play.\n\nEvery painting has a plaque under it with a clue: a Japanese word, its sound in romaji, and one kana. Walk the rooms, read each plaque and learn its kana, then put the fifteen missing pieces back in the chart. Columns are the consonants (k, s, t…), rows the vowels (a, i, u, e, o): か sits where k meets a.\n\nComplete the chart to escape."
+    "subtitle": "Learn Japanese or Korean to get out",
+    "intro": "Choose Japanese or Korean at the start. You are locked in the gallery after closing time; the way out is a language chart on the table at the far end of the west room, with fifteen characters missing — a different set each time you play.\n\nEvery painting has a plaque with a clue for the language you chose. Walk the rooms, read each plaque, then fill the chart. Complete it correctly to escape."
   },
   "artworks": [
     {

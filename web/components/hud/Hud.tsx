@@ -8,36 +8,44 @@ import { Slider } from "@/components/ui/slider";
 import { typing, useGame } from "@/lib/store";
 import { takePhoto } from "@/lib/photo";
 import { EXHIBITION } from "@/lib/artworks";
-import { usePuzzle } from "@/lib/puzzle";
+import { LANGS, type Lang, start, usePuzzle } from "@/lib/puzzle";
 import { Panel } from "./Panel";
 import { Escaped, PuzzleDialog } from "./Puzzle";
 
-const HELP = "Drag to look; WASD or the stick (bottom left) to move. Click the notebook by the door for instructions, read the plaques, then solve the hiragana chart.";
-
-const NOTEBOOK = `You are locked in the gallery after closing time. The only way out is the hiragana chart on the table at the far end of the west room (down the corridor) — fifteen kana are missing from it (a different fifteen each time you play).
-
-Read the plaque under every painting: each one teaches a Japanese word and one kana. Then put those kana back in the right holes on the chart. Columns are consonants (k, s, t…), rows are vowels (a, i, u, e, o): か sits where k meets a.
-
-Fill the chart correctly and the door will open.`;
 const one = (v: number | readonly number[]) => (Array.isArray(v) ? v[0] : v) as number;
 
-// Title over the slowly turning gallery; any key, click or tap enters.
+function pickLang(lang: Lang) {
+  start(lang);
+  // Next tick so this click doesn't also fall through into the room.
+  queueMicrotask(() => useGame.setState({ title: false }));
+}
+
+// Title: choose Japanese or Korean, then enter the gallery.
 function Title() {
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 bg-background/60 text-center backdrop-blur-[2px]">
-      <p className="text-sm uppercase tracking-[0.4em] text-muted-foreground">A Japanese puzzle game</p>
+    <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 bg-background/60 p-4 text-center backdrop-blur-[2px]">
+      <p className="text-sm uppercase tracking-[0.4em] text-muted-foreground">A language puzzle game</p>
       <h1 className="text-5xl font-light uppercase tracking-[0.2em] text-foreground sm:text-7xl">{EXHIBITION.title}</h1>
       <div className="h-1 w-40 bg-foreground" />
-      {EXHIBITION.subtitle && <p className="text-lg text-wood">{EXHIBITION.subtitle}</p>}
-      <Button size="lg" className="mt-6 h-14 px-10 text-xl font-bold">ENTER</Button>
-      <p className="text-sm text-muted-foreground">tap or press any key · ? for controls</p>
+      <p className="text-lg text-wood">Learn Japanese or Korean to get out</p>
+      <p className="max-w-md text-sm text-muted-foreground">Choose a language to learn. Painting plaques and the chart puzzle will teach that script.</p>
+      <div className="mt-4 flex w-full max-w-lg flex-col gap-2 sm:flex-row">
+        <Button size="lg" className="h-14 flex-1 text-lg font-bold" onClick={(e) => { e.stopPropagation(); pickLang("ja"); }}>
+          {LANGS.ja.label}
+        </Button>
+        <Button size="lg" variant="outline" className="h-14 flex-1 border-2 border-wood text-lg font-bold text-wood" onClick={(e) => { e.stopPropagation(); pickLang("ko"); }}>
+          {LANGS.ko.label}
+        </Button>
+      </div>
     </div>
   );
 }
 
-// On touch screens the menu folds away behind a ☰ button (top right) so the gallery fills the screen; it opens under the button.
 function LeftPanel() {
-  const open = useGame((s) => s.menu), holes = usePuzzle((s) => s.holes), placed = usePuzzle((s) => s.holes.filter((i) => s.placed[i]).length);
+  const open = useGame((s) => s.menu);
+  const lang = usePuzzle((s) => s.lang), holes = usePuzzle((s) => s.holes);
+  const placed = usePuzzle((s) => s.holes.filter((i) => s.placed[i]).length);
+  const pack = lang ? LANGS[lang] : null;
   const toggle = () => useGame.setState({ menu: !open });
   return (
     <>
@@ -46,15 +54,19 @@ function LeftPanel() {
       {open ? <XIcon /> : <MenuIcon />}
     </Button>
     <Panel side="left" className={`[@media(pointer:coarse)]:left-auto [@media(pointer:coarse)]:right-2.5 [@media(pointer:coarse)]:top-14 [@media(pointer:coarse)]:max-h-[calc(100dvh-4.5rem)] ${open ? "" : "[@media(pointer:coarse)]:hidden"}`}>
-      <p><b className="text-wood">{EXHIBITION.title}</b>{EXHIBITION.subtitle && <><br /><span className="text-xs">{EXHIBITION.subtitle}</span></>}<br /><span className="text-muted-foreground">{HELP}</span></p>
-      <p className="font-semibold">Chart: {placed} / {holes.length} kana placed</p>
+      <p>
+        <b className="text-wood">{EXHIBITION.title}</b>
+        {pack && <><br /><span className="text-xs">{pack.label}</span></>}
+        <br /><span className="text-muted-foreground">{pack?.help ?? ""}</span>
+      </p>
+      <p className="font-semibold">Chart: {placed} / {holes.length} {pack?.unit ?? "piece"}s placed</p>
       <p className="text-[11px] leading-snug text-muted-foreground">
         Gallery: <a className="underline" href="https://sketchfab.com/3d-models/richards-art-gallery-audio-tour-0e3e19faa6474fd5974e6a7ed1b221d8" target="_blank" rel="noreferrer">Richard&apos;s Art Gallery – Audio Tour</a> by{" "}
         <a className="underline" href="https://sketchfab.com/shinymagic" target="_blank" rel="noreferrer">shinymagic</a>,{" "}
         <a className="underline" href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a> (optimised)
       </p>
       <div className="grid gap-1">
-        {EXHIBITION.intro && <Button size="sm" onClick={() => useGame.setState({ dialog: "about" })}>How to escape</Button>}
+        <Button size="sm" onClick={() => useGame.setState({ dialog: "about" })}>How to escape</Button>
         <Button size="sm" variant="outline" onClick={takePhoto}>Photo [P]</Button>
         <Button size="sm" variant="outline" onClick={() => useGame.setState({ hideUI: true })}>Showcase mode [H]</Button>
         <div className="grid grid-cols-2 gap-1">
@@ -67,18 +79,18 @@ function LeftPanel() {
   );
 }
 
-const CONTROLS: [string, string][] = [
-  ["Everywhere", "P photo · H hide UI (Show controls brings it back) · ? this help"],
-  ["Room", "Drag to look, WASD or arrows to move (double-tap a move key to run), click anything that lights up."],
-  ["Notebook", "On the table by the blue door (east room). Click it for the escape instructions — you need to solve the hiragana puzzle."],
-  ["Paintings", "Each painting has a plaque under it with a Japanese word and one kana. Walk up and read it — paintings are not clickable."],
-  ["Hiragana chart", "On the table at the far end of the west room. Click it, pick a piece, tap the hole it belongs in. Tap a placed piece to take it back."],
-  ["Touch screens", "Tap = click, drag = look, the stick at the bottom left = walk (drag past the circle to run), ☰ (top right) shows or hides the menu. Every panel has a button to close it, no keyboard needed."],
-];
-
 function Dialogs() {
   const dialog = useGame((s) => s.dialog), sensitivity = useGame((s) => s.sensitivity), quality = useGame((s) => s.quality);
+  const lang = usePuzzle((s) => s.lang), pack = lang ? LANGS[lang] : LANGS.ja;
   const close = () => useGame.setState({ dialog: "" });
+  const controls: [string, string][] = [
+    ["Everywhere", "P photo · H hide UI (Show controls brings it back) · ? this help"],
+    ["Room", "Drag to look, WASD or arrows to move (double-tap a move key to run), click anything that lights up."],
+    ["Notebook", "On the table by the blue door (east room). Click it for the escape instructions — you need to solve the puzzle."],
+    ["Paintings", `Each painting has a plaque under it with a ${lang === "ko" ? "Korean" : "Japanese"} word and one ${pack.unit}. Walk up and read it — paintings are not clickable.`],
+    ["Chart", pack.controlsChart],
+    ["Touch screens", "Tap = click, drag = look, the stick at the bottom left = walk (drag past the circle to run), ☰ (top right) shows or hides the menu. Every panel has a button to close it, no keyboard needed."],
+  ];
   return (
     <>
       <Dialog open={dialog === "about"} onOpenChange={(o) => { if (!o) close(); }}>
@@ -86,10 +98,10 @@ function Dialogs() {
           <DialogHeader>
             <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">How to escape</p>
             <DialogTitle className="text-2xl font-light uppercase tracking-[0.15em]">{EXHIBITION.title}</DialogTitle>
-            {EXHIBITION.subtitle && <p className="text-wood">{EXHIBITION.subtitle}</p>}
+            <p className="text-wood">{pack.label}</p>
           </DialogHeader>
-          <p className="whitespace-pre-wrap text-sm leading-relaxed">{EXHIBITION.intro}</p>
-          <Button onClick={close}>Enter the gallery</Button>
+          <p className="whitespace-pre-wrap text-sm leading-relaxed">{pack.notebook}</p>
+          <Button onClick={close}>Back to the gallery</Button>
         </DialogContent>
       </Dialog>
       <Dialog open={dialog === "notebook"} onOpenChange={(o) => { if (!o) close(); }}>
@@ -99,7 +111,7 @@ function Dialogs() {
             <DialogTitle className="text-2xl font-light uppercase tracking-[0.15em]">Notebook</DialogTitle>
             <p className="font-semibold text-wood">You need to solve the puzzle to escape.</p>
           </DialogHeader>
-          <p className="whitespace-pre-wrap text-sm leading-relaxed">{NOTEBOOK}</p>
+          <p className="whitespace-pre-wrap text-sm leading-relaxed">{pack.notebook}</p>
           <Button onClick={close}>Close [Esc]</Button>
         </DialogContent>
       </Dialog>
@@ -107,7 +119,7 @@ function Dialogs() {
         <DialogContent className="sm:max-w-lg">
           <DialogHeader><DialogTitle>Controls</DialogTitle></DialogHeader>
           <dl className="space-y-2 text-sm">
-            {CONTROLS.map(([h, t]) => <div key={h}><dt className="font-bold text-wood">{h}</dt><dd className="text-muted-foreground">{t}</dd></div>)}
+            {controls.map(([h, t]) => <div key={h}><dt className="font-bold text-wood">{h}</dt><dd className="text-muted-foreground">{t}</dd></div>)}
           </dl>
           <Button onClick={close}>Close</Button>
         </DialogContent>
@@ -134,29 +146,22 @@ function Dialogs() {
   );
 }
 
-// Keys that work everywhere outside dialogs: title dismiss, L, H, P, ?.
+// Keys outside dialogs: H, P, ?. Title only leaves via the language buttons.
 function useHudKeys() {
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       if (typing(e)) return;
       const s = useGame.getState();
-      if (s.title) { enter(); return; }
-      if (s.dialog || usePuzzle.getState().escaped) return;
+      if (s.title || s.dialog || usePuzzle.getState().escaped) return;
       if (e.key === "h") useGame.setState({ hideUI: !s.hideUI });
       if (e.key === "p") takePhoto();
       if (e.key === "?" || e.key === "F1") { e.preventDefault(); useGame.setState({ dialog: "controls" }); }
     };
-    // Leave the title after this event has been handled everywhere, so the key or click that enters
-    // doesn't also switch a view or toggle the lamp.
-    const enter = () => setTimeout(() => useGame.setState({ title: false }), 0);
-    const tap = () => { if (useGame.getState().title) enter(); };
     window.addEventListener("keydown", key);
-    window.addEventListener("pointerup", tap);
-    return () => { window.removeEventListener("keydown", key); window.removeEventListener("pointerup", tap); };
+    return () => window.removeEventListener("keydown", key);
   }, []);
 }
 
-// Portrait phones are too narrow for the side panels: ask for landscape instead of shrinking everything.
 function TurnSideways() {
   return (
     <div className="fixed inset-0 z-50 hidden flex-col items-center justify-center gap-3 bg-background p-6 text-center [@media(orientation:portrait)_and_(pointer:coarse)]:flex">
@@ -175,11 +180,7 @@ export function Hud() {
     <>
       <TurnSideways />
       <Dialogs />
-      {!hideUI && (
-        <>
-          <LeftPanel />
-        </>
-      )}
+      {!hideUI && <LeftPanel />}
     </>
   );
 }
