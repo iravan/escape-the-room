@@ -23,17 +23,17 @@ function pickLang(lang: Lang) {
 // Title: choose Japanese or Korean, then enter the gallery.
 function Title() {
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center gap-4 bg-background/60 p-4 text-center backdrop-blur-[2px]">
-      <p className="text-sm uppercase tracking-[0.4em] text-muted-foreground">A language puzzle game</p>
-      <h1 className="text-5xl font-light uppercase tracking-[0.2em] text-foreground sm:text-7xl">{EXHIBITION.title}</h1>
-      <div className="h-1 w-40 bg-foreground" />
-      <p className="text-lg text-wood">Learn Japanese or Korean to get out</p>
-      <p className="max-w-md text-sm text-muted-foreground">Choose a language to learn. Painting plaques and the chart puzzle will teach that script.</p>
-      <div className="mt-4 flex w-full max-w-lg flex-col gap-2 sm:flex-row">
-        <Button size="lg" className="h-14 flex-1 text-lg font-bold" onClick={(e) => { e.stopPropagation(); pickLang("ja"); }}>
+    <div className="fixed inset-0 flex flex-col items-center justify-center gap-3 overflow-y-auto overscroll-contain bg-background/60 pt-[max(1rem,env(safe-area-inset-top))] pr-[max(1rem,env(safe-area-inset-right))] pb-[max(1rem,env(safe-area-inset-bottom))] pl-[max(1rem,env(safe-area-inset-left))] text-center backdrop-blur-[2px] [@media(max-height:420px)]:justify-start [@media(max-height:420px)]:gap-2">
+      <p className="text-sm uppercase tracking-[0.4em] text-muted-foreground [@media(max-height:420px)]:text-xs">A language puzzle game</p>
+      <h1 className="text-4xl font-light uppercase tracking-[0.2em] text-foreground sm:text-7xl [@media(max-height:420px)]:text-3xl">{EXHIBITION.title}</h1>
+      <div className="h-1 w-40 bg-foreground [@media(max-height:420px)]:h-0.5 [@media(max-height:420px)]:w-24" />
+      <p className="text-lg text-wood [@media(max-height:420px)]:text-sm">Learn Japanese or Korean to get out</p>
+      <p className="max-w-md text-sm text-muted-foreground [@media(max-height:420px)]:hidden">Choose a language to learn. Painting plaques and the chart puzzle will teach that script.</p>
+      <div className="mt-2 flex w-full max-w-lg flex-col gap-2 sm:flex-row [@media(max-height:420px)]:mt-1">
+        <Button size="lg" className="h-14 flex-1 text-lg font-bold [@media(max-height:420px)]:h-11 [@media(max-height:420px)]:text-base" onClick={(e) => { e.stopPropagation(); pickLang("ja"); }}>
           {LANGS.ja.label}
         </Button>
-        <Button size="lg" variant="outline" className="h-14 flex-1 border-2 border-wood text-lg font-bold text-wood" onClick={(e) => { e.stopPropagation(); pickLang("ko"); }}>
+        <Button size="lg" variant="outline" className="h-14 flex-1 border-2 border-wood text-lg font-bold text-wood [@media(max-height:420px)]:h-11 [@media(max-height:420px)]:text-base" onClick={(e) => { e.stopPropagation(); pickLang("ko"); }}>
           {LANGS.ko.label}
         </Button>
       </div>
@@ -50,10 +50,10 @@ function LeftPanel() {
   return (
     <>
     <Button size="icon" variant="outline" aria-label={open ? "Hide menu" : "Show menu"} aria-expanded={open} onClick={toggle}
-      className="fixed right-2.5 top-2.5 hidden bg-background/90 shadow-md [@media(pointer:coarse)]:inline-flex">
+      className="fixed top-[max(0.625rem,env(safe-area-inset-top))] right-[max(0.625rem,env(safe-area-inset-right))] hidden bg-background/90 shadow-md [@media(pointer:coarse)]:inline-flex">
       {open ? <XIcon /> : <MenuIcon />}
     </Button>
-    <Panel side="left" className={`[@media(pointer:coarse)]:left-auto [@media(pointer:coarse)]:right-2.5 [@media(pointer:coarse)]:top-14 [@media(pointer:coarse)]:max-h-[calc(100dvh-4.5rem)] ${open ? "" : "[@media(pointer:coarse)]:hidden"}`}>
+    <Panel side="left" className={`[@media(pointer:coarse)]:left-auto [@media(pointer:coarse)]:right-[max(0.625rem,env(safe-area-inset-right))] [@media(pointer:coarse)]:top-[calc(3.5rem+env(safe-area-inset-top))] [@media(pointer:coarse)]:max-h-[calc(100dvh-4.5rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] ${open ? "" : "[@media(pointer:coarse)]:hidden"}`}>
       <p>
         <b className="text-wood">{EXHIBITION.title}</b>
         {pack && <><br /><span className="text-xs">{pack.label}</span></>}
@@ -164,7 +164,7 @@ function useHudKeys() {
 
 function TurnSideways() {
   return (
-    <div className="fixed inset-0 z-50 hidden flex-col items-center justify-center gap-3 bg-background p-6 text-center [@media(orientation:portrait)_and_(pointer:coarse)]:flex">
+    <div className="fixed inset-0 z-50 hidden flex-col items-center justify-center gap-3 bg-background pt-[max(1.5rem,env(safe-area-inset-top))] pr-[max(1.5rem,env(safe-area-inset-right))] pb-[max(1.5rem,env(safe-area-inset-bottom))] pl-[max(1.5rem,env(safe-area-inset-left))] text-center [@media(orientation:portrait)_and_(pointer:coarse)]:flex">
       <p className="text-3xl font-light uppercase tracking-[0.2em] text-wood">Turn your phone sideways</p>
       <p className="text-muted-foreground">The gallery is best in landscape.</p>
     </div>

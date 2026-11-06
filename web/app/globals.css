@@ -91,10 +91,17 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
-    @apply font-sans;
+    @apply font-sans h-full overflow-hidden overscroll-none;
+    height: 100dvh;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground h-full overflow-hidden overscroll-none;
+    height: 100dvh;
+    /* Fixed so iOS Safari address-bar show/hide doesn't resize past the canvas. */
+    position: fixed;
+    inset: 0;
+    width: 100%;
   }
 }

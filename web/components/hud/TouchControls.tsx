@@ -24,7 +24,7 @@ function MoveStick() {
   return (
     <div
       aria-label="Move"
-      className={`fixed bottom-4 left-4 hidden size-24 touch-none select-none items-center justify-center rounded-full border bg-background/50 shadow-md backdrop-blur [@media(pointer:coarse)]:flex ${sprint ? "border-wood ring-2 ring-wood/40" : "border-border"}`}
+      className={`fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] hidden size-24 touch-none select-none items-center justify-center rounded-full border bg-background/50 shadow-md backdrop-blur [@media(pointer:coarse)]:flex ${sprint ? "border-wood ring-2 ring-wood/40" : "border-border"}`}
       onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); const r = e.currentTarget.getBoundingClientRect(); origin.current = [r.left + r.width / 2, r.top + r.height / 2]; move(e.clientX, e.clientY); }}
       onPointerMove={(e) => move(e.clientX, e.clientY)}
       onPointerUp={stop}
@@ -40,7 +40,7 @@ export function TouchControls() {
   const hideUI = useGame((s) => s.hideUI), title = useGame((s) => s.title);
   if (title) return null;
   if (hideUI) return (
-    <Button size="sm" variant="outline" className="fixed bottom-3 right-3 bg-background/80 opacity-80" onClick={() => useGame.setState({ hideUI: false })}>Show controls</Button>
+    <Button size="sm" variant="outline" className="fixed bottom-[max(0.75rem,env(safe-area-inset-bottom))] right-[max(0.75rem,env(safe-area-inset-right))] bg-background/80 opacity-80" onClick={() => useGame.setState({ hideUI: false })}>Show controls</Button>
   );
   return <MoveStick />;
 }

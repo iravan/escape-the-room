@@ -81,9 +81,9 @@ export function Escaped() {
   if (!lang) return null;
   const pack = LANGS[lang], learned = holes.map((i) => pack.chart[i]!);
   return (
-    <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-4 overflow-y-auto bg-background/85 p-6 text-center backdrop-blur">
+    <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-3 overflow-y-auto overscroll-contain bg-background/85 pt-[max(1.5rem,env(safe-area-inset-top))] pr-[max(1.5rem,env(safe-area-inset-right))] pb-[max(1.5rem,env(safe-area-inset-bottom))] pl-[max(1.5rem,env(safe-area-inset-left))] text-center backdrop-blur [@media(max-height:420px)]:justify-start [@media(max-height:420px)]:gap-2">
       <p className="text-sm uppercase tracking-[0.4em] text-muted-foreground">The door clicks open</p>
-      <h1 className="text-5xl font-light uppercase tracking-[0.2em] sm:text-7xl">You escaped!</h1>
+      <h1 className="text-4xl font-light uppercase tracking-[0.2em] sm:text-7xl [@media(max-height:420px)]:text-3xl">You escaped!</h1>
       <p className="text-2xl text-wood">{pack.congrats}</p>
       <div className="grid max-w-xl grid-cols-5 gap-2 sm:grid-cols-8">
         {learned.map((c) => <div key={c.char} className="rounded border border-border bg-card px-2 py-1"><div className="text-2xl">{c.char}</div><div className="text-xs text-muted-foreground">{c.romaji}</div></div>)}
