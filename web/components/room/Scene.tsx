@@ -7,6 +7,7 @@ import { PostFX } from "./PostFX";
 import { Model as Gallery } from "./GalleryModel";
 import { Artworks } from "./Artworks";
 import { ChartTable } from "./ChartTable";
+import { Notebook } from "./Notebook";
 import { Tooltip } from "./Clickable";
 import { TouchControls } from "@/components/hud/TouchControls";
 import { Hud } from "@/components/hud/Hud";
@@ -35,6 +36,7 @@ export default function Scene() {
           <Artworks />
         </Suspense>
         <ChartTable />
+        <Notebook />
         <Lights />
         <CameraRig />
         <PostFX />

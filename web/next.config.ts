@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-// GitHub Pages build (the deploy workflow sets PAGES_BASE_PATH=/my-gallery): plain static files served from /<repo>/,
+// GitHub Pages build (the deploy workflow sets PAGES_BASE_PATH=/escape-the-room): plain static files served from /<repo>/,
 // so no server features. Everywhere else (dev, `next start`, `npm run check`) it's the normal server build.
 const pagesBase = process.env.PAGES_BASE_PATH;
 const pages = pagesBase !== undefined;

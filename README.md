@@ -1,7 +1,7 @@
 # Escape the Room
 
 A 3D escape room in the browser that teaches Japanese: you're locked in a gallery after closing time, and solving its
-puzzles teaches you hiragana. Two round, skylit rooms joined by a corridor. Live at https://iravan.github.io/my-gallery/.
+puzzles teaches you hiragana. Two round, skylit rooms joined by a corridor. Live at https://iravan.github.io/escape-the-room/.
 
 **How to play:** every painting has a plaque under it with a clue: a Japanese word, its romaji and one kana
 (e.g. ほし (hoshi) means star. ほ = ho). Paintings are not clickable — walk up and read. You start by the blue door

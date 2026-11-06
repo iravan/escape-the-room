@@ -12,7 +12,13 @@ import { usePuzzle } from "@/lib/puzzle";
 import { Panel } from "./Panel";
 import { Escaped, PuzzleDialog } from "./Puzzle";
 
-const HELP = "Drag to look; WASD or the stick (bottom left) to move. Read the clue under each painting, then solve the hiragana chart at the far end of the west room.";
+const HELP = "Drag to look; WASD or the stick (bottom left) to move. Click the notebook on the west-room table for instructions, read the plaques, then solve the hiragana chart.";
+
+const NOTEBOOK = `You are locked in the gallery after closing time. The only way out is the hiragana chart on the table at the far end of this west room — fifteen kana are missing from it (a different fifteen each time you play).
+
+Read the plaque under every painting: each one teaches a Japanese word and one kana. Then put those kana back in the right holes on the chart. Columns are consonants (k, s, t…), rows are vowels (a, i, u, e, o): か sits where k meets a.
+
+Fill the chart correctly and the door will open.`;
 const one = (v: number | readonly number[]) => (Array.isArray(v) ? v[0] : v) as number;
 
 // Title over the slowly turning gallery; any key, click or tap enters.
@@ -64,6 +70,7 @@ function LeftPanel() {
 const CONTROLS: [string, string][] = [
   ["Everywhere", "P photo · H hide UI (Show controls brings it back) · ? this help"],
   ["Room", "Drag to look, WASD or arrows to move (double-tap a move key to run), click anything that lights up."],
+  ["Notebook", "On the round table in the west room. Click it for the escape instructions — you need to solve the hiragana puzzle."],
   ["Paintings", "Each painting has a plaque under it with a Japanese word and one kana. Walk up and read it — paintings are not clickable."],
   ["Hiragana chart", "On the table at the far end of the west room. Click it, pick a piece, tap the hole it belongs in. Tap a placed piece to take it back."],
   ["Touch screens", "Tap = click, drag = look, the stick at the bottom left = walk (drag past the circle to run), ☰ (top right) shows or hides the menu. Every panel has a button to close it, no keyboard needed."],
@@ -83,6 +90,17 @@ function Dialogs() {
           </DialogHeader>
           <p className="whitespace-pre-wrap text-sm leading-relaxed">{EXHIBITION.intro}</p>
           <Button onClick={close}>Enter the gallery</Button>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={dialog === "notebook"} onOpenChange={(o) => { if (!o) close(); }}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Found in the gallery</p>
+            <DialogTitle className="text-2xl font-light uppercase tracking-[0.15em]">Notebook</DialogTitle>
+            <p className="font-semibold text-wood">You need to solve the puzzle to escape.</p>
+          </DialogHeader>
+          <p className="whitespace-pre-wrap text-sm leading-relaxed">{NOTEBOOK}</p>
+          <Button onClick={close}>Close [Esc]</Button>
         </DialogContent>
       </Dialog>
       <Dialog open={dialog === "controls"} onOpenChange={(o) => { if (!o) close(); }}>
