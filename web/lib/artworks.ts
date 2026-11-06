@@ -1,14 +1,13 @@
-import { create } from "zustand";
 import config from "@/public/artworks/artworks.json";
 import { SPOTS, type Spot } from "./gallery";
 
 // The gallery's artworks: images in public/artworks/, described in public/artworks/artworks.json (see its README).
 // Each hangs in a spot (lib/gallery.ts SPOTS: w1–w4 west room, n1–n5 / s1–s5 corridor, e1–e4 east room);
 // without one it takes the next free spot. `width` is the frame's width in metres, `height` its centre height.
-// Like a museum guide: a short `description` and a longer `details` text, both shown in its panel;
-// `number` is its catalogue number, in config order.
+// Paintings are not clickable. Each round, `lib/puzzle.ts` deals random missing kana and assigns a teaching plaque per painting.
+// `number` is its catalogue number, in config order (plaque order matches this).
 export type Artwork = {
-  id: string; number: number; image: string; title: string; artist: string; artistInfo: string; year: string; medium: string;
+  id: string; number: number; image: string; title: string; clue: string; artist: string; artistInfo: string; year: string; medium: string;
   dimensions: string; collection: string; description: string; details: string; spot: Spot; width: number; height: number;
   size: [number, number] | null; // the real picture, width × height in metres, from `dimensions`
 };
@@ -43,7 +42,7 @@ export function normalizeArtworks(raw: unknown): Artwork[] {
     if (ids.has(id)) id = `${id}-${i}`;
     ids.add(id);
     return [{
-      id, number: i + 1, image, spot, title: str(a.title) || image, artist: str(a.artist), artistInfo: str(a.artistInfo),
+      id, number: i + 1, image, spot, title: str(a.title) || image, clue: str(a.clue), artist: str(a.artist), artistInfo: str(a.artistInfo),
       year: String(a.year ?? ""), medium: str(a.medium), dimensions: str(a.dimensions), collection: str(a.collection),
       description: str(a.description), details: str(a.details), size: parseDimensions(str(a.dimensions)), width: Math.min(2, Math.max(0.2, num(a.width) ?? spot.w)), height: num(a.height) ?? spot.position[1],
     }];
@@ -52,8 +51,5 @@ export function normalizeArtworks(raw: unknown): Artwork[] {
 
 export const ARTWORKS = normalizeArtworks(config);
 const ex = ((config as { exhibition?: Record<string, unknown> }).exhibition ?? {}) as Record<string, unknown>;
-export const EXHIBITION: Exhibition = { title: str(ex.title) || "My Gallery", subtitle: str(ex.subtitle), intro: str(ex.intro) };
+export const EXHIBITION: Exhibition = { title: str(ex.title) || "Escape the Room", subtitle: str(ex.subtitle), intro: str(ex.intro) };
 export const artworkUrl = (a: Artwork) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/artworks/${a.image}`;
-
-// The artwork whose description is open ("" = none).
-export const useArtwork = create<{ open: string }>(() => ({ open: "" }));

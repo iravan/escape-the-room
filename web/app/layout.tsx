@@ -20,8 +20,8 @@ const notoJP = Noto_Sans_JP({ weight: ["400", "700"], preload: false, display: "
 const notoKR = Noto_Sans_KR({ weight: ["400", "700"], preload: false, display: "swap", variable: "--font-cjk-kr" });
 
 export const metadata: Metadata = {
-  title: "My Gallery",
-  description: "A 3D room for showcasing artworks.",
+  title: "Escape the Room",
+  description: "A 3D escape room: solve puzzles in a gallery to learn Japanese hiragana and get out.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

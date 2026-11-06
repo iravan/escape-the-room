@@ -33,8 +33,11 @@ const SPOT_ROWS: [string, string, string, Vec3, number, number, number][] = [
 ];
 export const SPOTS: Spot[] = SPOT_ROWS.map(([id, label, original, position, rotation, w, h]) => ({ id, label, original, position, rotation, w, h }));
 
-// Furniture you can't walk through: [x, z, radius] (tables, plants, the two benches in the east room).
-export const OBSTACLES: [number, number, number][] = [[-8.9, 0, 0.6], [11.15, 0.95, 0.6], [-5.5, 1.0, 0.35], [9.0, -1.46, 0.35], [11.5, -2.0, 0.55], [13.3, 1.4, 0.55]];
+// The final puzzle's table (the hiragana chart), at the far end of the west room, facing back down the gallery (east).
+export const CHART_TABLE = { x: -11.7, z: 0.2 };
+
+// Furniture you can't walk through: [x, z, radius] (tables, plants, the two benches in the east room, the chart table).
+export const OBSTACLES: [number, number, number][] = [[-8.9, 0, 0.6], [11.15, 0.95, 0.6], [-5.5, 1.0, 0.35], [9.0, -1.46, 0.35], [11.5, -2.0, 0.55], [13.3, 1.4, 0.55], [CHART_TABLE.x, CHART_TABLE.z, 0.6]];
 
 // Can you stand here (eye at least `margin` from any wall or obstacle)?
 export function walkable(x: number, z: number, margin = 0.35): boolean {
@@ -44,4 +47,4 @@ export function walkable(x: number, z: number, margin = 0.35): boolean {
   return inRoom || inCorridor;
 }
 
-export const START = { position: [-11.2, 1.6, 1.2] as Vec3, yaw: 76 }; // west room, looking down the corridor
+export const START = { position: [15.2, 1.6, -0.1] as Vec3, yaw: -90 }; // east room by the blue door, looking down the corridor

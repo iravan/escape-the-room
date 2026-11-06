@@ -1,8 +1,8 @@
 {
   "exhibition": {
-    "title": "Vincent van Gogh",
-    "subtitle": "Fifteen paintings, 1886–1890",
-    "intro": "From his first summer in Paris to his last weeks in Auvers-sur-Oise, Vincent van Gogh (1853–1890) painted around 850 canvases in barely ten years. This selection follows him from dark Paris still lifes to the blazing colour of Arles and Saint-Rémy.\n\nStart in the west room with The Starry Night, walk the corridor, and end in the east room. Click any painting to read more."
+    "title": "Escape the Room",
+    "subtitle": "Learn hiragana to get out",
+    "intro": "You are locked in the gallery after closing time. You start by the blue door; the way to open it is a hiragana chart on the table at the far end of the west room, but fifteen of its kana are missing — a different fifteen each time you play.\n\nEvery painting has a plaque under it with a clue: a Japanese word, its sound in romaji, and one kana. Walk the rooms, read each plaque and learn its kana, then put the fifteen missing pieces back in the chart. Columns are the consonants (k, s, t…), rows the vowels (a, i, u, e, o): か sits where k meets a.\n\nComplete the chart to escape."
   },
   "artworks": [
     {
@@ -16,8 +16,9 @@
       "dimensions": "73.7 × 92.1 cm",
       "collection": "The Museum of Modern Art, New York",
       "spot": "w1",
-      "description": "A swirling night sky over a sleeping village, painted at the asylum in Saint-Rémy.",
-      "details": "Van Gogh painted this in June 1889, a few weeks after admitting himself to the asylum of Saint-Paul-de-Mausole. The view is from his east-facing window, but the village was added from memory and the cypress from imagination.\n\nThe sky is built from thick, rhythmic strokes: eleven stars, a crescent moon and a great spiral of wind. He thought it a failure at the time; it is now one of the most recognised paintings in the world."
+      "details": "Van Gogh painted this in June 1889, a few weeks after admitting himself to the asylum of Saint-Paul-de-Mausole. The view is from his east-facing window, but the village was added from memory and the cypress from imagination.\n\nThe sky is built from thick, rhythmic strokes: eleven stars, a crescent moon and a great spiral of wind. He thought it a failure at the time; it is now one of the most recognised paintings in the world.",
+      "clue": "ほし (hoshi) means star. ほ = ho",
+      "description": "A swirling night sky over a sleeping village, painted at the asylum in Saint-Rémy."
     },
     {
       "id": "vango-01",
@@ -30,8 +31,9 @@
       "dimensions": "73.3 × 92.4 cm",
       "collection": "Van Gogh Museum, Amsterdam",
       "spot": "w2",
-      "description": "Blossoming almond branches against a clear blue sky, a gift for his newborn nephew.",
-      "details": "In February 1890 Van Gogh's brother Theo and his wife Jo had a son, named Vincent after him. Van Gogh painted these branches to hang over the baby's bed.\n\nAlmond trees flower early in spring, so they stand for new life. The flat sky and strong outlines show the influence of the Japanese prints he collected."
+      "details": "In February 1890 Van Gogh's brother Theo and his wife Jo had a son, named Vincent after him. Van Gogh painted these branches to hang over the baby's bed.\n\nAlmond trees flower early in spring, so they stand for new life. The flat sky and strong outlines show the influence of the Japanese prints he collected.",
+      "clue": "はな (hana) means flower. な = na",
+      "description": "Blossoming almond branches against a clear blue sky, a gift for his newborn nephew."
     },
     {
       "id": "vango-03",
@@ -44,8 +46,9 @@
       "dimensions": "95 × 73 cm",
       "collection": "Van Gogh Museum, Amsterdam",
       "spot": "w3",
-      "description": "Sunflowers in an earthenware vase, painted almost entirely in shades of yellow.",
-      "details": "Van Gogh first painted sunflowers in Arles in August 1888 to decorate the room of his friend Paul Gauguin. This is one of the repetitions he made in January 1889.\n\nHe wanted to show that a painting could be built from one colour in many tones. The flowers go from fresh to withered, a reminder of the cycle of life."
+      "details": "Van Gogh first painted sunflowers in Arles in August 1888 to decorate the room of his friend Paul Gauguin. This is one of the repetitions he made in January 1889.\n\nHe wanted to show that a painting could be built from one colour in many tones. The flowers go from fresh to withered, a reminder of the cycle of life.",
+      "clue": "ひまわり (himawari) means sunflower. ひ = hi",
+      "description": "Sunflowers in an earthenware vase, painted almost entirely in shades of yellow."
     },
     {
       "id": "vango-11",
@@ -58,8 +61,9 @@
       "dimensions": "72.4 × 91.3 cm",
       "collection": "Van Gogh Museum, Amsterdam",
       "spot": "w4",
-      "description": "His bedroom in the Yellow House in Arles, painted to express complete rest.",
-      "details": "Van Gogh described this painting to Theo in detail: lilac walls, a red floor, a yellow bed and chairs, a scarlet blanket. The flat colours, without shadows, were meant to rest the mind.\n\nThe room was in the Yellow House, where he hoped to found an artists' community. He painted two later versions from memory after the original was damaged."
+      "details": "Van Gogh described this painting to Theo in detail: lilac walls, a red floor, a yellow bed and chairs, a scarlet blanket. The flat colours, without shadows, were meant to rest the mind.\n\nThe room was in the Yellow House, where he hoped to found an artists' community. He painted two later versions from memory after the original was damaged.",
+      "clue": "ねる (neru) means to sleep. ね = ne",
+      "description": "His bedroom in the Yellow House in Arles, painted to express complete rest."
     },
     {
       "id": "vango-07",
@@ -72,8 +76,9 @@
       "dimensions": "50.4 × 101.3 cm",
       "collection": "Van Gogh Museum, Amsterdam",
       "spot": "n1",
-      "description": "A vast green field under a heavy blue sky at Auvers-sur-Oise.",
-      "details": "Painted in July 1890 in Auvers-sur-Oise, in the last weeks of his life. The unusual wide canvas stretches the land and sky into two great bands.\n\nVan Gogh wrote that these fields expressed sadness and extreme loneliness, but also what he found healthy and strengthening in the countryside."
+      "details": "Painted in July 1890 in Auvers-sur-Oise, in the last weeks of his life. The unusual wide canvas stretches the land and sky into two great bands.\n\nVan Gogh wrote that these fields expressed sadness and extreme loneliness, but also what he found healthy and strengthening in the countryside.",
+      "clue": "くも (kumo) means cloud. く = ku",
+      "description": "A vast green field under a heavy blue sky at Auvers-sur-Oise."
     },
     {
       "id": "vango-13",
@@ -86,8 +91,9 @@
       "dimensions": "59.2 × 71 cm",
       "collection": "Kröller-Müller Museum, Otterlo",
       "spot": "n2",
-      "description": "A still life of peonies and roses from his first year in Paris.",
-      "details": "In Paris Van Gogh could not afford models, so he painted flowers to study colour. Dozens of flower still lifes date from the summer of 1886.\n\nHere pale pinks and whites glow against a dark red ground; within a year his palette would become far brighter under the influence of the Impressionists."
+      "details": "In Paris Van Gogh could not afford models, so he painted flowers to study colour. Dozens of flower still lifes date from the summer of 1886.\n\nHere pale pinks and whites glow against a dark red ground; within a year his palette would become far brighter under the influence of the Impressionists.",
+      "clue": "いろ (iro) means colour. ろ = ro",
+      "description": "A still life of peonies and roses from his first year in Paris."
     },
     {
       "id": "vango-09",
@@ -100,8 +106,9 @@
       "dimensions": "44.5 × 37.2 cm",
       "collection": "Van Gogh Museum, Amsterdam",
       "spot": "n3",
-      "description": "A Paris self-portrait built from short, rhythmic strokes of complementary colour.",
-      "details": "Van Gogh painted more than twenty self-portraits in Paris, partly because he was his own cheapest model. This is one of the most daring.\n\nThe strokes radiate around his head like a halo, and complementary colours sit side by side: blue against orange, red against green. It shows how quickly he absorbed the new ideas of Seurat and the Neo-Impressionists."
+      "details": "Van Gogh painted more than twenty self-portraits in Paris, partly because he was his own cheapest model. This is one of the most daring.\n\nThe strokes radiate around his head like a halo, and complementary colours sit side by side: blue against orange, red against green. It shows how quickly he absorbed the new ideas of Seurat and the Neo-Impressionists.",
+      "clue": "かお (kao) means face. か = ka",
+      "description": "A Paris self-portrait built from short, rhythmic strokes of complementary colour."
     },
     {
       "id": "vango-04",
@@ -114,8 +121,9 @@
       "dimensions": "73.2 × 92.7 cm",
       "collection": "Van Gogh Museum, Amsterdam",
       "spot": "n4",
-      "description": "A reaper in a golden wheatfield under a yellow sun, seen from his room in Saint-Rémy.",
-      "details": "Seen through the barred window of his room at the asylum. Van Gogh called the reaper an image of death, 'in the sense that humanity is the wheat being reaped', but said it was a death without sadness, in broad daylight with a sun flooding everything with fine gold."
+      "details": "Seen through the barred window of his room at the asylum. Van Gogh called the reaper an image of death, 'in the sense that humanity is the wheat being reaped', but said it was a death without sadness, in broad daylight with a sun flooding everything with fine gold.",
+      "clue": "たいよう (taiyou) means sun. た = ta",
+      "description": "A reaper in a golden wheatfield under a yellow sun, seen from his room in Saint-Rémy."
     },
     {
       "id": "vango-06",
@@ -128,8 +136,9 @@
       "dimensions": "",
       "collection": "",
       "spot": "n5",
-      "description": "A blossoming bush in the garden of the asylum at Saint-Rémy.",
-      "details": "In his first weeks at Saint-Rémy Van Gogh was not allowed outside the grounds, so he painted the overgrown hospital garden: irises, ivy, lilacs and flowering shrubs.\n\nThe tangle of strokes fills the whole canvas with no sky, as if the viewer were standing inside the bush."
+      "details": "In his first weeks at Saint-Rémy Van Gogh was not allowed outside the grounds, so he painted the overgrown hospital garden: irises, ivy, lilacs and flowering shrubs.\n\nThe tangle of strokes fills the whole canvas with no sky, as if the viewer were standing inside the bush.",
+      "clue": "き (ki) means tree. き = ki",
+      "description": "A blossoming bush in the garden of the asylum at Saint-Rémy."
     },
     {
       "id": "vango-08",
@@ -142,8 +151,9 @@
       "dimensions": "72.5 × 92 cm",
       "collection": "Musée d'Orsay, Paris",
       "spot": "s1",
-      "description": "Gas lamps of Arles reflected in the Rhône under a starry sky.",
-      "details": "Painted on the riverbank in Arles in September 1888, a year before The Starry Night. Van Gogh worked outdoors at night, fascinated by how to paint darkness with colour.\n\nThe Plough (Big Dipper) shines over the town, and the orange gaslight trails across the blue water. A couple walks along the bank in the foreground."
+      "details": "Painted on the riverbank in Arles in September 1888, a year before The Starry Night. Van Gogh worked outdoors at night, fascinated by how to paint darkness with colour.\n\nThe Plough (Big Dipper) shines over the town, and the orange gaslight trails across the blue water. A couple walks along the bank in the foreground.",
+      "clue": "かわ (kawa) means river. わ = wa",
+      "description": "Gas lamps of Arles reflected in the Rhône under a starry sky."
     },
     {
       "id": "vango-10",
@@ -156,8 +166,9 @@
       "dimensions": "65.1 × 50 cm",
       "collection": "Van Gogh Museum, Amsterdam",
       "spot": "s2",
-      "description": "Van Gogh at his easel with palette and brushes, at the end of his Paris years.",
-      "details": "His last self-portrait made in Paris, finished just before he left for Arles in February 1888. He shows himself as a professional painter, at work.\n\nIn a letter he described the face as 'grey-pink with green eyes, ash-coloured hair'. The palette holds the very colours used in the painting."
+      "details": "His last self-portrait made in Paris, finished just before he left for Arles in February 1888. He shows himself as a professional painter, at work.\n\nIn a letter he described the face as 'grey-pink with green eyes, ash-coloured hair'. The palette holds the very colours used in the painting.",
+      "clue": "え (e) means picture. え = e",
+      "description": "Van Gogh at his easel with palette and brushes, at the end of his Paris years."
     },
     {
       "id": "vango-14",
@@ -170,8 +181,9 @@
       "dimensions": "73 × 93.4 cm",
       "collection": "The Metropolitan Museum of Art, New York",
       "spot": "s3",
-      "description": "Ripe wheat, dark cypresses and rolling clouds near Saint-Rémy.",
-      "details": "Painted in July 1889 near the asylum. Van Gogh considered this among his best summer canvases and made two more versions.\n\nCypresses fascinated him: he wrote that they were 'as beautiful in line and proportion as an Egyptian obelisk'. Their dark green anchors the moving clouds and wheat."
+      "details": "Painted in July 1889 near the asylum. Van Gogh considered this among his best summer canvases and made two more versions.\n\nCypresses fascinated him: he wrote that they were 'as beautiful in line and proportion as an Egyptian obelisk'. Their dark green anchors the moving clouds and wheat.",
+      "clue": "そら (sora) means sky. そ = so",
+      "description": "Ripe wheat, dark cypresses and rolling clouds near Saint-Rémy."
     },
     {
       "id": "vango-12",
@@ -184,8 +196,9 @@
       "dimensions": "",
       "collection": "",
       "spot": "s4",
-      "description": "Twisting vines in front of village houses at Auvers, with a woman walking among them.",
-      "details": "One of the few works on paper from Van Gogh's last months in Auvers-sur-Oise. Quick, looping lines of colour describe old vines and the houses behind.\n\nWorking on paper let him record a motif quickly, between the large canvases he painted almost daily that summer."
+      "details": "One of the few works on paper from Van Gogh's last months in Auvers-sur-Oise. Quick, looping lines of colour describe old vines and the houses behind.\n\nWorking on paper let him record a motif quickly, between the large canvases he painted almost daily that summer.",
+      "clue": "むら (mura) means village. む = mu",
+      "description": "Twisting vines in front of village houses at Auvers, with a woman walking among them."
     },
     {
       "id": "vango-15",
@@ -198,8 +211,9 @@
       "dimensions": "44 × 39 cm",
       "collection": "Van Gogh Museum, Amsterdam",
       "spot": "s5",
-      "description": "Bastille Day flags in thick strokes of red, white and blue along a Paris street.",
-      "details": "Painted on the French national holiday in his first summer in Paris. The street almost dissolves into heavy dabs of paint.\n\nIt is one of his most abstract works: the flags and garlands are suggested rather than drawn, an experiment with colour and texture."
+      "details": "Painted on the French national holiday in his first summer in Paris. The street almost dissolves into heavy dabs of paint.\n\nIt is one of his most abstract works: the flags and garlands are suggested rather than drawn, an experiment with colour and texture.",
+      "clue": "はた (hata) means flag. は = ha",
+      "description": "Bastille Day flags in thick strokes of red, white and blue along a Paris street."
     },
     {
       "id": "vango-05",
@@ -212,8 +226,9 @@
       "dimensions": "90.6 × 72 cm",
       "collection": "Kröller-Müller Museum, Otterlo",
       "spot": "e4",
-      "description": "A night road with a cypress between a crescent moon and a bright star.",
-      "details": "Painted in May 1890, one of the last works from Saint-Rémy. Two figures walk home along a road, a carriage behind them, under a sky holding both a crescent moon and a radiant star.\n\nVan Gogh took the painting with him to Auvers. He described it as 'a night sky with a moon without radiance… a star with exaggerated brilliance'."
+      "details": "Painted in May 1890, one of the last works from Saint-Rémy. Two figures walk home along a road, a carriage behind them, under a sky holding both a crescent moon and a radiant star.\n\nVan Gogh took the painting with him to Auvers. He described it as 'a night sky with a moon without radiance… a star with exaggerated brilliance'.",
+      "clue": "つき (tsuki) means moon. つ = tsu",
+      "description": "A night road with a cypress between a crescent moon and a bright star."
     }
   ]
 }

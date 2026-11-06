@@ -3,7 +3,8 @@ import { persist } from "zustand/middleware";
 import { START } from "./gallery";
 
 // The on-screen move stick (touch screens): −1…1 sideways and forward, read every frame like held WASD keys.
-export const stick = { x: 0, y: 0 };
+// `run` is true while the finger is dragged outside the stick's circle (same boost as a double-tapped WASD key).
+export const stick = { x: 0, y: 0, run: false };
 export type Vec3 = [number, number, number];
 
 // A key belongs to a field only while typing in it. A focused slider (it keeps focus after a drag) only keeps its arrows,
@@ -22,7 +23,7 @@ type State = {
   title: boolean; // title screen showing (every load)
   hideUI: boolean; // showcase mode
   menu: boolean; // touch screens: menu panel shown (not saved)
-  dialog: "" | "settings" | "controls" | "about";
+  dialog: "" | "settings" | "controls" | "about" | "puzzle";
   look: (dYaw: number, dPitch: number) => void;
   setRoomPos: (p: Vec3) => void;
 };
@@ -44,7 +45,7 @@ export const useGame = create<State>()(
       look: (dYaw, dPitch) => set((s) => ({ yaw: s.yaw + dYaw, pitch: Math.min(60, Math.max(-60, s.pitch + dPitch)) })),
       setRoomPos: (p) => set({ roomPos: p }),
     }),
-    // version 1: the gallery building; a save from the old bedroom starts fresh at the entrance.
-    { name: "my-gallery", version: 1, migrate: () => ({}), partialize: ({ yaw, pitch, roomPos, sensitivity, quality }) => ({ yaw, pitch, roomPos, sensitivity, quality }) },
+    // version 2: you start at the blue door; an older save starts fresh there.
+    { name: "escape-the-room", version: 2, migrate: () => ({}), partialize: ({ yaw, pitch, roomPos, sensitivity, quality }) => ({ yaw, pitch, roomPos, sensitivity, quality }) },
   ),
 );

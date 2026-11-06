@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ARTWORKS, normalizeArtworks, parseDimensions } from "./artworks";
-import { SPOTS, walkable } from "./gallery";
+import { CHART_TABLE, SPOTS, START, walkable } from "./gallery";
 
 describe("artworks config", () => {
   it("fills defaults from the spot, drops bad entries, keeps ids and spots unique", () => {
@@ -41,7 +41,9 @@ describe("artworks config", () => {
 
 describe("floor plan", () => {
   it("lets you walk the rooms and corridor but not through walls or tables", () => {
-    expect(walkable(-11.2, 1.2)).toBe(true); // start
+    expect(walkable(START.position[0], START.position[2])).toBe(true);
+    expect(walkable(CHART_TABLE.x + 1.3, CHART_TABLE.z)).toBe(true); // in front of the chart
+    expect(walkable(CHART_TABLE.x, CHART_TABLE.z)).toBe(false);
     expect(walkable(2, -0.1)).toBe(true); // corridor
     expect(walkable(14, 2)).toBe(true); // east room
     expect(walkable(2, 1.5)).toBe(false); // behind the corridor wall

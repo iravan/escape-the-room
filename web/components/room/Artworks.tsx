@@ -4,16 +4,31 @@ import { useEffect, useMemo, useRef } from "react";
 import { useTexture } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { Clickable } from "./Clickable";
 import { CEILING, type Spot } from "@/lib/gallery";
-import { ARTWORKS, artworkUrl, useArtwork, type Artwork } from "@/lib/artworks";
-import { useGame } from "@/lib/store";
+import { ARTWORKS, artworkUrl, type Artwork } from "@/lib/artworks";
+import { usePuzzle } from "@/lib/puzzle";
 
 const FRAME = 0.035, DEPTH = 0.03, MAT = 0.14, MOUNT = 0.07; // silver moulding; white mount: share of the frame's width, or 7 cm round a real-size picture
+const PLAQUE_H = 0.1; // height of the clue plaque under the frame (m)
+
+function clueMap(clue: string) {
+  const c = document.createElement("canvas"), g = c.getContext("2d")!, W = 768, H = 128;
+  c.width = W; c.height = H;
+  const draw = () => {
+    g.fillStyle = "#f6efdf"; g.fillRect(0, 0, W, H);
+    g.strokeStyle = "#b9ab92"; g.lineWidth = 4; g.strokeRect(2, 2, W - 4, H - 4);
+    g.fillStyle = "#2b2b2d"; g.font = `500 ${Math.round(H * 0.36)}px "Noto Sans JP", sans-serif`;
+    g.textAlign = "center"; g.textBaseline = "middle"; g.fillText(clue, W / 2, H / 2, W - 40);
+  };
+  draw();
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+  document.fonts?.ready.then(() => { draw(); t.needsUpdate = true; });
+  return t;
+}
 
 // Framed like the original gallery: thin silver moulding, white mount, the picture in the middle. With known
 // dimensions the picture is its real size (a photo with slightly different proportions is cropped, never stretched);
-// otherwise it fills the spot's width.
+// otherwise it fills the spot's width. Not clickable: the clue sits on a plaque under the frame.
 function Piece({ a }: { a: Artwork }) {
   const map = useTexture(artworkUrl(a), (t) => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; });
   const img = map.image as { width: number; height: number }, photo = img.width / img.height;
@@ -26,15 +41,23 @@ function Piece({ a }: { a: Artwork }) {
     for (let i = 0; i < uv.count; i++) uv.setXY(i, 0.5 + (uv.getX(i) - 0.5) * Math.min(1, k), 0.5 + (uv.getY(i) - 0.5) * Math.min(1, 1 / k));
     return g;
   }, [pw, ph, photo]);
+  const clue = usePuzzle((s) => s.clues[a.number - 1] ?? "");
+  const plaque = useMemo(() => (clue ? clueMap(clue) : null), [clue]);
   return (
-    <Clickable hint={a.title} onTap={() => { useArtwork.setState({ open: a.id }); useGame.setState({ menu: false }); }} position={[0, 0, DEPTH / 2]}>
+    <group position={[0, 0, DEPTH / 2]}>
       <mesh castShadow>
         <boxGeometry args={[w, h, DEPTH]} />
         <meshStandardMaterial color="#d3d5d8" metalness={0.35} roughness={0.35} />
       </mesh>
       <mesh position={[0, 0, DEPTH / 2 + 0.001]}><planeGeometry args={[w - 2 * FRAME, h - 2 * FRAME]} /><meshStandardMaterial color="#f4f3ef" roughness={0.9} /></mesh>
       <mesh geometry={picture} position={[0, 0, DEPTH / 2 + 0.002]}><meshStandardMaterial map={map} roughness={0.8} /></mesh>
-    </Clickable>
+      {plaque && (
+        <mesh position={[0, -h / 2 - PLAQUE_H / 2 - 0.02, DEPTH / 2 + 0.001]}>
+          <planeGeometry args={[Math.min(w, 1.1), PLAQUE_H]} />
+          <meshStandardMaterial map={plaque} roughness={0.85} />
+        </mesh>
+      )}
+    </group>
   );
 }
 

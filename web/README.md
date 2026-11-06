@@ -1,12 +1,13 @@
-# My Gallery (web)
+# Escape the Room (web)
 
-Next.js 16 + React Three Fiber + Zustand + Tailwind + shadcn/ui. Artworks: `public/artworks/` (see its README).
+Next.js 16 + React Three Fiber + Zustand + Tailwind + shadcn/ui. Paintings and their clues: `public/artworks/` (see its README);
+the hiragana chart puzzle: `lib/puzzle.ts`.
 
 ```sh
 npm install
 npm run dev     # http://localhost:3000
 npm run build
-npm test        # Vitest: artworks config, floor plan
+npm test        # Vitest: artworks config, floor plan, hiragana puzzle
 npm run check   # needs a running server (default http://127.0.0.1:3100/): room screenshot, drag artifact scan, FPS
 ```
 

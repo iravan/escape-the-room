@@ -15,7 +15,7 @@ To add one:
   "artist": "Me",
   "year": "2026",
   "medium": "Oil on canvas",
-  "description": "Shown when someone clicks the artwork. Use \n\n for paragraphs.",
+  "clue": "ほし (hoshi) means star. ほ = ho",
   "spot": "n2"
 }
 ```
@@ -24,7 +24,8 @@ To add one:
 | --- | --- | --- |
 | `image` | File name in this folder (required) | — |
 | `id` | Unique name | the file name |
-| `title`, `artist`, `year`, `medium`, `description` | Shown in the panel when the artwork is clicked | empty (title = file name) |
+| `title`, `artist`, `year`, `medium`, `description`, `details` | Kept in the config for the catalogue; not shown in-game (paintings are not clickable) | empty (title = file name) |
+| `clue` | Unused in-game; plaque text is dealt each round from `lib/puzzle.ts` (`CLUES`) | none |
 | `spot` | Where it hangs (table below) | the next free spot, in table order |
 | `width` | Frame width in metres (0.2–2); the height follows the image | the spot's original frame width |
 | `height` | Height of the frame's centre above the floor, metres | the spot's original height |
@@ -53,5 +54,5 @@ are left out.
 | `e3` | East room, right of the door |
 | `e4` | East room, left of the corridor |
 
-"Left" and "right" are as you walk the corridor from the west room (where you start) to the east room (with the blue
-door). The config is read at build time: restart `npm run dev` if a change doesn't show, and push to `main` to publish.
+"Left" and "right" are as you walk the corridor from the west room (with the hiragana chart) to the east room (with
+the blue door, where you start). The config is read at build time: restart `npm run dev` if a change doesn't show, and push to `main` to publish.

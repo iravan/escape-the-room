@@ -6,8 +6,8 @@ import { CameraRig } from "./CameraRig";
 import { PostFX } from "./PostFX";
 import { Model as Gallery } from "./GalleryModel";
 import { Artworks } from "./Artworks";
+import { ChartTable } from "./ChartTable";
 import { Tooltip } from "./Clickable";
-import { ArtworkPanel } from "@/components/hud/ArtworkPanel";
 import { TouchControls } from "@/components/hud/TouchControls";
 import { Hud } from "@/components/hud/Hud";
 import { useGame } from "@/lib/store";
@@ -34,18 +34,14 @@ export default function Scene() {
           <Gallery />
           <Artworks />
         </Suspense>
+        <ChartTable />
         <Lights />
         <CameraRig />
         <PostFX />
       </Canvas>
       <Hud />
       <TouchControls />
-      {!hideUI && !title && (
-        <>
-          <Tooltip />
-          <ArtworkPanel />
-        </>
-      )}
+      {!hideUI && !title && <Tooltip />}
     </>
   );
 }

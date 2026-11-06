@@ -5,15 +5,20 @@ import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { stick, typing, useGame } from "@/lib/store";
 import { DEG, START, walkable } from "@/lib/gallery";
+import { usePuzzle } from "@/lib/puzzle";
 
 const tmpPos = new THREE.Vector3();
 const tmpQuat = new THREE.Quaternion();
 const tmpEuler = new THREE.Euler(0, 0, 0, "YXZ");
 
-// Drag to look (mouse or one finger), WASD/arrows to walk.
+const MOVE = new Set(["w", "a", "s", "d", "arrowup", "arrowdown", "arrowleft", "arrowright"]);
+const WALK = 1.5, RUN = 2.8, DOUBLE_MS = 300; // m/s; double-tap a move key within this window to run
+
+// Drag to look (mouse or one finger), WASD/arrows to walk; double-tap a move key (or drag the stick past its circle) to run.
 export function CameraRig() {
   const { camera, gl, events } = useThree();
   const held = useRef(new Set<string>());
+  const run = useRef(false), lastTap = useRef(0), lastKey = useRef("");
 
   // A saved position can be somewhere you can no longer stand (furniture added, an older layout): start at the entrance.
   useEffect(() => {
@@ -41,15 +46,20 @@ export function CameraRig() {
     };
     const up = () => { fingers = Math.max(0, fingers - 1); last = null; };
     const key = (e: KeyboardEvent) => {
-      if (e.type === "keyup") { held.current.delete(e.key.toLowerCase()); return; } // a release always counts, wherever focus is
-      if (typing(e)) return;
-      const s = useGame.getState();
-      if (s.dialog || s.title) return; // dialogs own the keyboard; the first key just enters
-      if (e.type === "keydown") {
-        held.current.add(e.key.toLowerCase());
+      const k = e.key.toLowerCase();
+      if (e.type === "keyup") {
+        held.current.delete(k);
+        if (MOVE.has(k)) { lastTap.current = performance.now(); lastKey.current = k; }
+        if (![...held.current].some((x) => MOVE.has(x))) run.current = false;
+        return;
       }
+      if (e.repeat || typing(e)) return;
+      const s = useGame.getState();
+      if (s.dialog || s.title || usePuzzle.getState().escaped) return; // dialogs own the keyboard; the first key just enters
+      if (MOVE.has(k) && k === lastKey.current && performance.now() - lastTap.current < DOUBLE_MS) run.current = true;
+      held.current.add(k);
     };
-    const blur = () => held.current.clear();
+    const blur = () => { held.current.clear(); run.current = false; };
     el.addEventListener("pointerdown", down);
     el.addEventListener("pointermove", move);
     el.addEventListener("pointerup", up);
@@ -77,7 +87,7 @@ export function CameraRig() {
       const h = clamp((k.has("d") || k.has("arrowright") ? 1 : 0) - (k.has("a") || k.has("arrowleft") ? 1 : 0) + stick.x);
       const v = clamp((k.has("w") || k.has("arrowup") ? 1 : 0) - (k.has("s") || k.has("arrowdown") ? 1 : 0) + stick.y);
       if (h || v) {
-        const y = -s.yaw * DEG, step = 1.5 * Math.min(dt, 0.1);
+        const y = -s.yaw * DEG, step = (run.current || stick.run ? RUN : WALK) * Math.min(dt, 0.1);
         // forward is -z in three; rotate (h, -v) by the yaw
         const dx = (h * Math.cos(y) - v * Math.sin(y)) * step;
         const dz = (-h * Math.sin(y) - v * Math.cos(y)) * step;
