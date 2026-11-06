@@ -1,7 +1,10 @@
 "use client";
 
+import * as THREE from "three";
 import { Clickable } from "./Clickable";
 import { useGame } from "@/lib/store";
+
+const YAW = new THREE.Euler(0, 0.4, 0);
 
 // The notebook on the west-room round table. Click it for the escape instructions — you need to solve the puzzle.
 export function Notebook() {
@@ -10,7 +13,7 @@ export function Notebook() {
       hint="Notebook: how to escape"
       onTap={() => useGame.setState({ dialog: "notebook", menu: false })}
       position={[-8.75, 0.9, 0.12]}
-      rotation={[0, 0.4, 0]}
+      rotation={YAW}
     >
       {/* Closed book: walnut cover, cream page edge */}
       <mesh castShadow position={[0, 0.015, 0]}>
