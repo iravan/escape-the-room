@@ -6,3 +6,6 @@ node_modules/
 .env*
 *.pem
 .aider*
+
+# graphify knowledge graph (generated)
+graphify-out/
