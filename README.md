@@ -39,19 +39,19 @@ Forked from My Gallery (itself forked from My Room, a vinyl bedroom).
 
 ```sh
 cd web
-npm install
-npm run dev     # http://localhost:3000
+bun install
+bun run dev     # http://localhost:3000
 ```
 
-Requires **Node ≥ 20.9**. Useful scripts:
+Requires **Bun 1.4**. Useful scripts:
 
 ```sh
-npm run build
-npm test        # Vitest: artworks config, floor plan, hiragana puzzle
-npm run check   # headless Chrome: screenshots, drag artifact scan, FPS
+bun run build
+bun run test    # Vitest: artworks config, floor plan, hiragana puzzle
+bun run check   # headless Chrome: screenshots, drag artifact scan, FPS
 ```
 
-More notes (including the `npm` / pnpm alias on some Macs) live in [`web/README.md`](web/README.md).
+More notes live in [`web/README.md`](web/README.md).
 
 ## Docs
 

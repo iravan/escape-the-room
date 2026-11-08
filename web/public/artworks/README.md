@@ -55,4 +55,4 @@ are left out.
 | `e4` | East room, left of the corridor |
 
 "Left" and "right" are as you walk the corridor from the west room (with the hiragana chart) to the east room (with
-the blue door, where you start). The config is read at build time: restart `npm run dev` if a change doesn't show, and push to `main` to publish.
+the blue door, where you start). The config is read at build time: restart `bun run dev` if a change doesn't show, and push to `main` to publish.
